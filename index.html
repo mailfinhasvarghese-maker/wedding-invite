@@ -3,24 +3,138 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Special Surprise ❤️</title>
+    <title>For My Kuttappi ❤️</title>
     <style>
-        body { background: #ffe5ec; display: flex; align-items: center; justify-content: center; height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; overflow: hidden; }
-        .card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center; max-width: 400px; animation: fadeIn 2s; }
-        .heart { color: #ff4d6d; font-size: 80px; animation: pulse 1s infinite alternate; }
-        h1 { color: #800f2f; margin-bottom: 10px; }
-        p { color: #590d22; line-height: 1.6; font-size: 18px; }
-        @keyframes pulse { from { transform: scale(1); } to { transform: scale(1.1); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        body {
+            background-color: #ffafcc;
+            margin: 0;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            cursor: crosshair;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            text-align: center;
+            z-index: 10;
+            border: 2px solid #ff4d6d;
+            max-width: 350px;
+            animation: fadeIn 2s ease-in;
+        }
+
+        .couple-photo {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid #ff4d6d;
+            margin-bottom: 20px;
+            transition: transform 0.5s;
+        }
+
+        .couple-photo:hover {
+            transform: scale(1.05) rotate(3deg);
+        }
+
+        .heart {
+            color: #ff4d6d;
+            font-size: 60px;
+            cursor: pointer;
+            display: inline-block;
+            transition: transform 0.3s;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        #secret-message {
+            display: none;
+            color: #800f2f;
+            font-weight: bold;
+            margin-top: 15px;
+            font-style: italic;
+            line-height: 1.4;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .trail {
+            position: absolute;
+            pointer-events: none;
+            color: #ff4d6d;
+            animation: floatAway 1s linear forwards;
+            z-index: 1;
+        }
+
+        @keyframes floatAway {
+            to { transform: translateY(-50px) translateX(20px); opacity: 0; }
+        }
     </style>
 </head>
 <body>
+
     <div class="card">
-        <div class="heart">❤️</div>
-        <h1>For Kuttappy</h1>
-        <p>You mean the world to me. I wanted to build something unique just to show you how much I care.</p>
-        <p><i>"Every day with you is my favorite day."</i></p>
-        <p><b>Happy Valentine's Day!</b></p>
+        <img src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
+        
+        <div class="heart" onclick="revealSecret()">❤️</div>
+        
+        <h1 id="main-title">For My Kuttappi</h1>
+        <p id="sub-text">I have a secret for you... Tap the heart!</p>
+        
+        <div id="secret-message">
+            "You are the best thing that ever happened to me. Every day with you feels like a gift. I built this just for you because you deserve the world! I love you! ❤️"
+        </div>
     </div>
+
+    <script>
+        function revealSecret() {
+            const secret = document.getElementById('secret-message');
+            secret.style.display = 'block';
+            document.getElementById('main-title').innerText = "I Love You!";
+            document.getElementById('sub-text').style.display = 'none';
+            
+            // Celebration burst
+            for(let i=0; i<15; i++) {
+                setTimeout(() => {
+                    createHeart(window.innerWidth/2 + (Math.random() - 0.5) * 200, window.innerHeight/2 + (Math.random() - 0.5) * 200);
+                }, i * 100);
+            }
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            createHeart(e.pageX, e.pageY);
+        });
+
+        function createHeart(x, y) {
+            const heart = document.createElement('div');
+            heart.innerHTML = '❤️';
+            heart.className = 'trail';
+            heart.style.left = x + 'px';
+            heart.style.top = y + 'px';
+            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 1000);
+        }
+    </script>
 </body>
 </html>
