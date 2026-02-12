@@ -16,7 +16,7 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            perspective: 1000px; /* Essential for 3D floating effect */
+            perspective: 1500px; /* Stronger 3D depth */
         }
 
         canvas {
@@ -30,17 +30,17 @@
         }
 
         .card {
-            background: rgba(20, 20, 20, 0.85);
-            padding: 30px;
+            background: rgba(20, 20, 20, 0.8);
+            padding: 40px 30px;
             border-radius: 25px;
-            box-shadow: 0 0 50px rgba(255, 77, 109, 0.5);
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
             text-align: center;
             z-index: 10;
             border: 2px solid #ff4d6d;
             max-width: 350px;
             width: 85%;
             backdrop-filter: blur(15px);
-            transform-style: preserve-3d;
+            transform-style: preserve-3d; /* Allows child elements to float in 3D */
             transition: transform 0.1s ease-out;
         }
 
@@ -50,21 +50,22 @@
             height: 220px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid #ff4d6d;
-            margin-bottom: 20px;
-            /* Floating physics */
-            transition: transform 0.2s cubic-bezier(0.075, 0.82, 0.165, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 6px solid #ff4d6d;
+            margin-bottom: 25px;
+            /* Floating physics - High Z-index translation */
+            transition: transform 0.15s ease-out;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
         }
 
         .show-image {
             display: inline-block;
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: popIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
 
         @keyframes popIn {
             0% { transform: scale(0) translateZ(0); opacity: 0; }
-            100% { transform: scale(1) translateZ(50px); opacity: 1; }
+            100% { transform: scale(1.1) translateZ(120px); opacity: 1; } /* Pushes photo outside the box */
         }
 
         .heart {
@@ -81,16 +82,17 @@
             100% { transform: scale(1); }
         }
 
-        h1 { color: #fff; font-size: 1.8rem; text-shadow: 0 0 10px #ff4d6d; pointer-events: none;}
-        p { color: #ffafcc; font-size: 1.1rem; pointer-events: none;}
+        h1 { color: #fff; font-size: 1.8rem; text-shadow: 0 0 10px #ff4d6d; margin-top: 15px; }
+        p { color: #ffafcc; font-size: 1.1rem; }
 
         #secret-message {
             display: none;
             color: #fff;
-            margin-top: 20px;
+            margin-top: 25px;
             line-height: 1.6;
             font-size: 1.2rem;
             text-shadow: 0 0 8px #ff4d6d;
+            transform: translateZ(30px); /* Lifts text slightly too */
         }
 
         .trail {
@@ -112,7 +114,7 @@
 
     <canvas id="canvas"></canvas>
     
-    <audio id="bg-music" src="firework.mp3" preload="auto"></audio>
+    <audio id="bg-music" src="firework.mp3" preload="auto" loop></audio>
 
     <div class="card" id="main-card">
         <img id="main-photo" src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
@@ -185,18 +187,16 @@
             document.getElementById('main-title').innerText = "I Love You Forever!";
             document.getElementById('sub-text').style.display = 'none';
 
-            // Reset and Play Song ONCE
-            music.currentTime = 0;
             music.volume = 0.8;
             music.play();
 
             setInterval(() => {
-                createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
+                createFirework(Math.random() * canvas.width, Math.random() * (canvas.height * 0.8));
             }, 700);
         }
 
         document.addEventListener('mousemove', function(e) {
-            // Heart trail logic
+            // Cursor hearts
             const heart = document.createElement('div');
             heart.innerHTML = '❤️';
             heart.className = 'trail';
@@ -205,16 +205,17 @@
             document.body.appendChild(heart);
             setTimeout(() => { heart.remove(); }, 1200);
 
-            // Floating 3D Parallax Logic
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+            // Floating 3D Effect
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 15; // Increased sensitivity
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 15;
             
-            // Tilts the whole card
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 
-            // Floats the photo inside the card separately
+            // High-intensity float for the photo (moves in opposite direction of mouse)
             if(isCelebrating) {
-                photo.style.transform = `translateX(${xAxis * -1.5}px) translateY(${yAxis * -1.5}px) translateZ(60px)`;
+                const moveX = xAxis * -2.5; 
+                const moveY = yAxis * -2.5;
+                photo.style.transform = `translateX(${moveX}px) translateY(${moveY}px) translateZ(150px) scale(1.1)`;
             }
         });
     </script>
