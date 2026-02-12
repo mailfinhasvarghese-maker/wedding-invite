@@ -16,7 +16,7 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            perspective: 1500px; /* Stronger 3D depth */
+            perspective: 2000px; /* Deep 3D space */
         }
 
         canvas {
@@ -40,7 +40,7 @@
             max-width: 350px;
             width: 85%;
             backdrop-filter: blur(15px);
-            transform-style: preserve-3d; /* Allows child elements to float in 3D */
+            transform-style: preserve-3d;
             transition: transform 0.1s ease-out;
         }
 
@@ -52,10 +52,12 @@
             object-fit: cover;
             border: 6px solid #ff4d6d;
             margin-bottom: 25px;
-            /* Floating physics - High Z-index translation */
-            transition: transform 0.15s ease-out;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
             position: relative;
+            z-index: 50;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            /* Smooth float transition */
+            transition: transform 0.1s ease-out; 
+            will-change: transform;
         }
 
         .show-image {
@@ -65,7 +67,7 @@
 
         @keyframes popIn {
             0% { transform: scale(0) translateZ(0); opacity: 0; }
-            100% { transform: scale(1.1) translateZ(120px); opacity: 1; } /* Pushes photo outside the box */
+            100% { transform: scale(1.1) translateZ(150px); opacity: 1; }
         }
 
         .heart {
@@ -82,8 +84,8 @@
             100% { transform: scale(1); }
         }
 
-        h1 { color: #fff; font-size: 1.8rem; text-shadow: 0 0 10px #ff4d6d; margin-top: 15px; }
-        p { color: #ffafcc; font-size: 1.1rem; }
+        h1 { color: #fff; text-shadow: 0 0 10px #ff4d6d; pointer-events: none; }
+        p { color: #ffafcc; pointer-events: none; }
 
         #secret-message {
             display: none;
@@ -92,7 +94,6 @@
             line-height: 1.6;
             font-size: 1.2rem;
             text-shadow: 0 0 8px #ff4d6d;
-            transform: translateZ(30px); /* Lifts text slightly too */
         }
 
         .trail {
@@ -152,12 +153,11 @@
             for (let i = 0; i < 120; i++) {
                 particles.push({
                     x: x, y: y,
-                    dx: (Math.random() - 0.5) * 20,
-                    dy: (Math.random() - 0.5) * 20,
+                    dx: (Math.random() - 0.5) * 22,
+                    dy: (Math.random() - 0.5) * 22,
                     size: Math.random() * 4 + 1,
                     color: `hsl(${hue}, 100%, 60%)`,
-                    life: 100,
-                    opacity: 1
+                    life: 100, opacity: 1
                 });
             }
         }
@@ -165,7 +165,6 @@
         function animate() {
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
             particles.forEach((p, i) => {
                 p.x += p.dx; p.y += p.dy; p.dy += 0.15; p.life--; p.opacity -= 0.01;
                 ctx.globalAlpha = p.opacity;
@@ -180,42 +179,42 @@
         function celebrate() {
             if(isCelebrating) return;
             isCelebrating = true;
-
             photo.classList.add('show-image');
             document.getElementById('secret-message').style.display = 'block';
             document.getElementById('heart-btn').style.display = 'none';
             document.getElementById('main-title').innerText = "I Love You Forever!";
             document.getElementById('sub-text').style.display = 'none';
-
             music.volume = 0.8;
             music.play();
-
             setInterval(() => {
-                createFirework(Math.random() * canvas.width, Math.random() * (canvas.height * 0.8));
+                createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
             }, 700);
         }
 
         document.addEventListener('mousemove', function(e) {
-            // Cursor hearts
-            const heart = document.createElement('div');
-            heart.innerHTML = '❤️';
-            heart.className = 'trail';
-            heart.style.left = e.clientX - 25 + 'px';
-            heart.style.top = e.clientY - 25 + 'px';
-            document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 1200);
+            // Heart trail
+            const h = document.createElement('div');
+            h.innerHTML = '❤️';
+            h.className = 'trail';
+            h.style.left = e.clientX - 25 + 'px';
+            h.style.top = e.clientY - 25 + 'px';
+            document.body.appendChild(h);
+            setTimeout(() => { h.remove(); }, 1200);
 
-            // Floating 3D Effect
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 15; // Increased sensitivity
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 15;
-            
-            card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            // Floating Calculation
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+            const moveX = (e.clientX - centerX) / 10; 
+            const moveY = (e.clientY - centerY) / 10;
 
-            // High-intensity float for the photo (moves in opposite direction of mouse)
+            // Card tilt
+            card.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
+
+            // Extreme Photo Float (Outside the box)
             if(isCelebrating) {
-                const moveX = xAxis * -2.5; 
-                const moveY = yAxis * -2.5;
-                photo.style.transform = `translateX(${moveX}px) translateY(${moveY}px) translateZ(150px) scale(1.1)`;
+                // The photo moves with the mouse but at a much higher "Z" depth
+                // It stays outside the card by using translateZ(150px)
+                photo.style.transform = `translateZ(180px) translateX(${moveX * 1.5}px) translateY(${moveY * 1.5}px)`;
             }
         });
     </script>
