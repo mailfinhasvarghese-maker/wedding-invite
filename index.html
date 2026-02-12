@@ -16,7 +16,7 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            perspective: 2000px; /* Deep 3D space */
+            perspective: 2000px;
         }
 
         canvas {
@@ -30,7 +30,7 @@
         }
 
         .card {
-            background: rgba(20, 20, 20, 0.8);
+            background: rgba(20, 20, 20, 0.85);
             padding: 40px 30px;
             border-radius: 25px;
             box-shadow: 0 0 50px rgba(255, 77, 109, 0.4);
@@ -55,8 +55,7 @@
             position: relative;
             z-index: 50;
             box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-            /* Smooth float transition */
-            transition: transform 0.1s ease-out; 
+            transition: transform 0.1s ease-out;
             will-change: transform;
         }
 
@@ -76,6 +75,8 @@
             cursor: pointer;
             display: inline-block;
             animation: pulse 1.5s infinite;
+            transition: all 0.3s ease; /* Smooth jump */
+            position: relative;
         }
 
         @keyframes pulse {
@@ -114,12 +115,12 @@
 <body>
 
     <canvas id="canvas"></canvas>
-    
     <audio id="bg-music" src="firework.mp3" preload="auto" loop></audio>
 
     <div class="card" id="main-card">
         <img id="main-photo" src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
-        <div id="heart-btn" class="heart" onclick="celebrate()">❤️</div>
+        
+        <div id="heart-btn" class="heart" onmouseover="moveHeart()" onclick="celebrate()">❤️</div>
         
         <h1 id="main-title">A Message for You <br> എന്റെ കുട്ടാപ്പി ❤️</h1>
         <p id="sub-text">Tap the heart to open...</p>
@@ -136,14 +137,30 @@
         const ctx = canvas.getContext('2d');
         const photo = document.getElementById('main-photo');
         const card = document.getElementById('main-card');
+        const heartBtn = document.getElementById('heart-btn');
         const music = document.getElementById('bg-music');
         
+        let moveCount = 0;
+        const maxMoves = 4;
+
         function resize() {
             canvas.width = window.innerWidth;
             canvas.height = window.innerHeight;
         }
         window.addEventListener('resize', resize);
         resize();
+
+        // JUMPING HEART LOGIC
+        function moveHeart() {
+            if (moveCount < maxMoves && !isCelebrating) {
+                // Generate random positions within the card
+                const x = (Math.random() - 0.5) * 200; 
+                const y = (Math.random() - 0.5) * 150;
+                
+                heartBtn.style.transform = `translate(${x}px, ${y}px)`;
+                moveCount++;
+            }
+        }
 
         let particles = [];
         let isCelebrating = false;
@@ -177,22 +194,28 @@
         animate();
 
         function celebrate() {
+            // Heart must be clicked, but only works after moves are done (or if user is fast!)
+            // We force it to reset position on click
+            heartBtn.style.transform = `translate(0, 0)`;
+            
             if(isCelebrating) return;
             isCelebrating = true;
+
             photo.classList.add('show-image');
             document.getElementById('secret-message').style.display = 'block';
-            document.getElementById('heart-btn').style.display = 'none';
+            heartBtn.style.display = 'none';
             document.getElementById('main-title').innerText = "I Love You Forever!";
             document.getElementById('sub-text').style.display = 'none';
+            
             music.volume = 0.8;
             music.play();
+
             setInterval(() => {
                 createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
             }, 700);
         }
 
         document.addEventListener('mousemove', function(e) {
-            // Heart trail
             const h = document.createElement('div');
             h.innerHTML = '❤️';
             h.className = 'trail';
@@ -201,19 +224,14 @@
             document.body.appendChild(h);
             setTimeout(() => { h.remove(); }, 1200);
 
-            // Floating Calculation
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
-            const moveX = (e.clientX - centerX) / 10; 
+            const moveX = (e.clientX - centerX) / 10;
             const moveY = (e.clientY - centerY) / 10;
 
-            // Card tilt
             card.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
 
-            // Extreme Photo Float (Outside the box)
             if(isCelebrating) {
-                // The photo moves with the mouse but at a much higher "Z" depth
-                // It stays outside the card by using translateZ(150px)
                 photo.style.transform = `translateZ(180px) translateX(${moveX * 1.5}px) translateY(${moveY * 1.5}px)`;
             }
         });
