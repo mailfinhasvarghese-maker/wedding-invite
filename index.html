@@ -66,7 +66,7 @@
 
         @keyframes popIn {
             0% { transform: scale(0) translateZ(0); opacity: 0; }
-            100% { transform: scale(1.1) translateZ(150px); opacity: 1; }
+            100% { transform: scale(1.1) translateZ(180px); opacity: 1; }
         }
 
         .heart {
@@ -75,8 +75,13 @@
             cursor: pointer;
             display: inline-block;
             animation: pulse 1.5s infinite;
-            transition: all 0.3s ease; /* Smooth jump */
-            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: fixed; /* Allows it to move anywhere on screen */
+            left: 50%;
+            top: 50%;
+            margin-left: -55px; /* Centers the 110px heart */
+            margin-top: -55px;
+            z-index: 100;
         }
 
         @keyframes pulse {
@@ -118,12 +123,10 @@
     <audio id="bg-music" src="firework.mp3" preload="auto" loop></audio>
 
     <div class="card" id="main-card">
+        <h1 id="main-title">എന്റെ കുട്ടാപ്പി ❤️</h1>
+        <p id="sub-text">ക്ലിക്ക് ചെയ്യൂ... (Click the heart!)</p>
+        
         <img id="main-photo" src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
-        
-        <div id="heart-btn" class="heart" onmouseover="moveHeart()" onclick="celebrate()">❤️</div>
-        
-        <h1 id="main-title">A Message for You <br> എന്റെ കുട്ടാപ്പി ❤️</h1>
-        <p id="sub-text">Tap the heart to open...</p>
         
         <div id="secret-message">
             എന്റെ ചക്കരയാട്ടോ ❤️.....<br>
@@ -131,6 +134,8 @@
             You are the best thing that ever happened to me. Every day with you feels like a gift. ❤️
         </div>
     </div>
+
+    <div id="heart-btn" class="heart" onclick="handleHeartClick()">❤️</div>
 
     <script>
         const canvas = document.getElementById('canvas');
@@ -140,8 +145,9 @@
         const heartBtn = document.getElementById('heart-btn');
         const music = document.getElementById('bg-music');
         
-        let moveCount = 0;
-        const maxMoves = 4;
+        let clickCount = 0;
+        const requiredClicks = 5;
+        let isCelebrating = false;
 
         function resize() {
             canvas.width = window.innerWidth;
@@ -150,20 +156,26 @@
         window.addEventListener('resize', resize);
         resize();
 
-        // JUMPING HEART LOGIC
-        function moveHeart() {
-            if (moveCount < maxMoves && !isCelebrating) {
-                // Generate random positions within the card
-                const x = (Math.random() - 0.5) * 200; 
-                const y = (Math.random() - 0.5) * 150;
+        function handleHeartClick() {
+            clickCount++;
+
+            if (clickCount < requiredClicks) {
+                // Move heart to a random spot on the screen
+                const padding = 100;
+                const newX = Math.random() * (window.innerWidth - padding * 2) + padding;
+                const newY = Math.random() * (window.innerHeight - padding * 2) + padding;
                 
-                heartBtn.style.transform = `translate(${x}px, ${y}px)`;
-                moveCount++;
+                heartBtn.style.left = newX + 'px';
+                heartBtn.style.top = newY + 'px';
+                heartBtn.style.marginLeft = '0';
+                heartBtn.style.marginTop = '0';
+            } else {
+                // FINAL CLICK: Open the surprise
+                celebrate();
             }
         }
 
         let particles = [];
-        let isCelebrating = false;
 
         function createFirework(x, y) {
             const hue = Math.random() * 360;
@@ -194,16 +206,15 @@
         animate();
 
         function celebrate() {
-            // Heart must be clicked, but only works after moves are done (or if user is fast!)
-            // We force it to reset position on click
-            heartBtn.style.transform = `translate(0, 0)`;
-            
             if(isCelebrating) return;
             isCelebrating = true;
 
+            // Put heart back and hide it
+            heartBtn.style.display = 'none';
+            
+            // Show content
             photo.classList.add('show-image');
             document.getElementById('secret-message').style.display = 'block';
-            heartBtn.style.display = 'none';
             document.getElementById('main-title').innerText = "I Love You Forever!";
             document.getElementById('sub-text').style.display = 'none';
             
