@@ -2,54 +2,57 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>For My Kuttappi ❤️</title>
     <style>
         body {
-            background-color: #000; /* Black background for better fireworks */
+            background-color: #000;
             margin: 0;
-            overflow: hidden;
+            padding: 0;
+            overflow: hidden; /* Prevents scrolling */
             font-family: 'Arial', sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            width: 100vw;
             cursor: crosshair;
-            perspective: 1000px;
         }
 
+        /* Fixed canvas to cover the ENTIRE screen including top edges */
         canvas {
-            position: absolute;
+            position: fixed;
             top: 0;
             left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 5;
+            z-index: 1;
         }
 
         .card {
-            background: rgba(20, 20, 20, 0.8); /* Dark glass effect */
+            background: rgba(20, 20, 20, 0.85);
             padding: 30px;
             border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(255, 77, 109, 0.3);
+            box-shadow: 0 0 50px rgba(255, 77, 109, 0.5);
             text-align: center;
             z-index: 10;
-            border: 1px solid #ff4d6d;
-            max-width: 380px;
-            width: 90%;
+            border: 2px solid #ff4d6d;
+            max-width: 350px;
+            width: 85%;
+            backdrop-filter: blur(15px);
             transition: transform 0.1s ease-out;
-            transform-style: preserve-3d;
-            backdrop-filter: blur(10px);
         }
 
         .couple-photo {
             display: none;
-            width: 200px;
-            height: 200px;
+            width: 220px;
+            height: 220px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid #ff4d6d;
+            border: 5px solid #ff4d6d;
             margin-bottom: 20px;
-            transition: transform 0.2s ease-out;
+            box-shadow: 0 0 20px #ff4d6d;
         }
 
         .show-image {
@@ -64,7 +67,7 @@
 
         .heart {
             color: #ff4d6d;
-            font-size: 80px;
+            font-size: 100px; /* Larger heart */
             cursor: pointer;
             display: inline-block;
             animation: pulse 1.5s infinite;
@@ -76,29 +79,31 @@
             100% { transform: scale(1); }
         }
 
-        h1 { color: #fff; text-shadow: 0 0 10px #ff4d6d; }
-        p { color: #ffafcc; }
+        h1 { color: #fff; font-size: 1.8rem; text-shadow: 0 0 10px #ff4d6d; margin-top: 10px; }
+        p { color: #ffafcc; font-size: 1.1rem; }
 
         #secret-message {
             display: none;
             color: #fff;
-            font-weight: bold;
-            margin-top: 15px;
+            margin-top: 20px;
             line-height: 1.6;
-            font-size: 1.1rem;
-            text-shadow: 0 0 5px #ff4d6d;
+            font-size: 1.2rem;
+            text-shadow: 0 0 8px #ff4d6d;
         }
 
+        /* ENLARGED Mouse Heart */
         .trail {
-            position: absolute;
+            position: fixed;
             pointer-events: none;
             color: #ff4d6d;
-            animation: floatAway 1s linear forwards;
-            z-index: 100;
+            z-index: 1000;
+            font-size: 40px !important; /* Forces large size */
+            animation: floatAway 1.2s ease-out forwards;
         }
 
         @keyframes floatAway {
-            to { transform: translateY(-50px) translateX(20px); opacity: 0; }
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-100px) rotate(20deg); opacity: 0; }
         }
     </style>
 </head>
@@ -106,14 +111,8 @@
 
     <canvas id="canvas"></canvas>
     
-    <audio id="firework-sound" crossorigin="anonymous">
-        <source src="https://actions.google.com/sounds/v1/explosions/firework_rocket_launch.ogg" type="audio/ogg">
-        <source src="https://www.soundjay.com/misc/sounds/firework-show-01.mp3" type="audio/mpeg">
-    </audio>
-
     <div class="card" id="main-card">
         <img id="main-photo" src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
-        
         <div id="heart-btn" class="heart" onclick="celebrate()">❤️</div>
         
         <h1 id="main-title">A Message for You <br> എന്റെ കുട്ടാപ്പി ❤️</h1>
@@ -122,8 +121,7 @@
         <div id="secret-message">
             എന്റെ ചക്കരയാട്ടോ ❤️.....<br>
             Happy Valentines Day Dear. <br><br>
-            You are the best thing that ever happened to me. Every day with you feels like a gift. 
-            I built this just for you because you deserve the world! I love you! ❤️
+            You are the best thing that ever happened to me. Every day with you feels like a gift. ❤️
         </div>
     </div>
 
@@ -132,36 +130,58 @@
         const ctx = canvas.getContext('2d');
         const photo = document.getElementById('main-photo');
         const card = document.getElementById('main-card');
-        const sound = document.getElementById('firework-sound');
         
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+        // Ensure canvas covers absolute full screen
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resize);
+        resize();
 
         let particles = [];
         let isCelebrating = false;
 
+        // BEEP SOUND GENERATOR (Works on all browsers)
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playFireworkSound() {
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(150, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.5);
+            
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.5);
+        }
+
         function createFirework(x, y) {
             const hue = Math.random() * 360;
-            for (let i = 0; i < 150; i++) { // More particles for "HUGE" feel
+            for (let i = 0; i < 150; i++) {
                 particles.push({
                     x: x, y: y,
-                    dx: (Math.random() - 0.5) * 20,
-                    dy: (Math.random() - 0.5) * 20,
-                    size: Math.random() * 3 + 1,
+                    dx: (Math.random() - 0.5) * 18,
+                    dy: (Math.random() - 0.5) * 18,
+                    size: Math.random() * 4 + 1,
                     color: `hsl(${hue}, 100%, 60%)`,
                     life: 100,
                     opacity: 1
                 });
             }
+            playFireworkSound();
         }
 
         function animate() {
-            // Semi-transparent black for motion trails
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.15)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             
             particles.forEach((p, i) => {
-                p.x += p.dx; p.y += p.dy; p.dy += 0.15; p.life--; p.opacity -= 0.01;
+                p.x += p.dx; p.y += p.dy; p.dy += 0.12; p.life--; p.opacity -= 0.01;
                 ctx.globalAlpha = p.opacity;
                 ctx.fillStyle = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
@@ -174,48 +194,33 @@
         function celebrate() {
             if(isCelebrating) return;
             isCelebrating = true;
-            
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+
             photo.classList.add('show-image');
             document.getElementById('secret-message').style.display = 'block';
             document.getElementById('heart-btn').style.display = 'none';
             document.getElementById('main-title').innerText = "I Love You Forever!";
             document.getElementById('sub-text').style.display = 'none';
 
-            // Start sound immediately on click
-            sound.play().catch(e => console.log("Sound error:", e));
-
             setInterval(() => {
-                createFirework(Math.random() * canvas.width, Math.random() * (canvas.height * 0.7));
-                
-                // Realistic overlap sound
-                const s = sound.cloneNode();
-                s.volume = 0.4;
-                s.play();
-            }, 700);
+                createFirework(Math.random() * canvas.width, Math.random() * (canvas.height * 0.8));
+            }, 600);
         }
 
+        // LARGE Heart Cursor
         document.addEventListener('mousemove', function(e) {
             const heart = document.createElement('div');
             heart.innerHTML = '❤️';
             heart.className = 'trail';
-            heart.style.left = e.pageX + 'px';
-            heart.style.top = e.pageY + 'px';
-            heart.style.fontSize = Math.random() * 15 + 10 + 'px';
+            heart.style.left = e.clientX + 'px';
+            heart.style.top = e.clientY + 'px';
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 1000);
+            setTimeout(() => { heart.remove(); }, 1200);
 
-            const xAxis = (window.innerWidth / 2 - e.pageX) / 20;
-            const yAxis = (window.innerHeight / 2 - e.pageY) / 20;
+            // Floating effect
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
             card.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-            
-            if(isCelebrating) {
-                photo.style.transform = `translateX(${xAxis * -1.5}px) translateY(${yAxis * -1.5}px) translateZ(50px)`;
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
         });
     </script>
 </body>
