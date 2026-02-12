@@ -16,23 +16,21 @@
             align-items: center;
             height: 100vh;
             width: 100vw;
-            perspective: 2000px;
+            perspective: 1500px;
         }
 
         canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 1;
         }
 
-        /* തുടക്കത്തിലെ വരികൾ */
+        /* Responsive Intro Text */
         #intro-text {
             position: fixed;
-            top: 20%;
+            top: 15%;
             text-align: center;
             width: 100%;
             z-index: 80;
@@ -41,17 +39,18 @@
 
         #intro-text h1 {
             color: #fff;
-            font-size: 2.2rem;
+            font-size: clamp(1.8rem, 5vw, 3rem); /* Grows on Desktop */
             text-shadow: 0 0 15px #ff4d6d;
             margin-bottom: 10px;
+            padding: 0 10px;
         }
 
         #intro-text p {
             color: #ffafcc;
-            font-size: 1.2rem;
+            font-size: clamp(1rem, 3vw, 1.5rem);
         }
 
-        /* സർപ്രൈസ് കാർഡ് */
+        /* The Main Rectangle Card */
         .card {
             background: rgba(25, 25, 25, 0.85);
             padding: 50px 30px 40px;
@@ -60,51 +59,46 @@
             text-align: center;
             z-index: 10;
             border: 2px solid #ff4d6d;
-            max-width: 350px;
+            max-width: 400px; /* Wider for Desktop */
             width: 85%;
             backdrop-filter: blur(15px);
             transform-style: preserve-3d;
             display: none;
             opacity: 0;
+            will-change: transform;
         }
 
         .pop-animation {
             display: block;
-            animation: cardReveal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards, 
-                       cardFloat 4s ease-in-out infinite alternate 1.2s;
+            animation: cardReveal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
         }
 
         @keyframes cardReveal {
-            0% { transform: scale(0) rotateY(90deg) translateZ(-500px); opacity: 0; }
+            0% { transform: scale(0) rotateY(45deg) translateZ(-200px); opacity: 0; }
             100% { transform: scale(1) rotateY(0deg) translateZ(0); opacity: 1; }
         }
 
-        @keyframes cardFloat {
-            from { transform: translateY(0px) rotateX(0deg); }
-            to { transform: translateY(-15px) rotateX(2deg); }
-        }
-
-        /* ഫോട്ടോ */
+        /* Floating Photo */
         .couple-photo {
-            width: 220px;
-            height: 220px;
+            width: clamp(180px, 40vw, 250px); /* Larger on Desktop */
+            height: clamp(180px, 40vw, 250px);
             border-radius: 50%;
             object-fit: cover;
             border: 6px solid #ff4d6d;
             position: absolute;
-            top: -110px;
+            top: -125px;
             left: 50%;
-            margin-left: -110px;
+            margin-left: clamp(-90px, -20vw, -125px);
             z-index: 50;
             box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            transition: transform 0.15s ease-out;
+            transition: transform 0.1s ease-out;
             will-change: transform;
             display: none;
         }
 
         .heart {
             color: #ff4d6d;
-            font-size: 110px;
+            font-size: clamp(80px, 15vw, 120px);
             cursor: pointer;
             display: inline-block;
             animation: pulse 1.5s infinite;
@@ -118,19 +112,19 @@
 
         @keyframes pulse {
             0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
+            50% { transform: scale(1.15); }
             100% { transform: scale(1); }
         }
 
-        #title-msg { color: #fff; text-shadow: 0 0 10px #ff4d6d; margin-top: 80px; font-size: 1.8rem; }
-        #secret-message { color: #fff; margin-top: 20px; line-height: 1.6; font-size: 1.2rem; text-shadow: 0 0 8px #ff4d6d; }
+        #title-msg { color: #fff; text-shadow: 0 0 10px #ff4d6d; margin-top: 80px; font-size: clamp(1.4rem, 4vw, 2rem); }
+        #secret-message { color: #fff; margin-top: 20px; line-height: 1.6; font-size: 1.1rem; text-shadow: 0 0 8px #ff4d6d; }
 
         .trail {
             position: fixed;
             pointer-events: none;
             color: #ff4d6d;
             z-index: 9999;
-            font-size: 50px !important;
+            font-size: 40px !important;
             animation: floatAway 1.2s ease-out forwards;
         }
 
@@ -194,15 +188,16 @@
             }
         }
 
+        // Firework Engine
         let particles = [];
         function createFirework(x, y) {
             const hue = Math.random() * 360;
-            for (let i = 0; i < 120; i++) {
+            for (let i = 0; i < 100; i++) {
                 particles.push({
                     x: x, y: y,
-                    dx: (Math.random() - 0.5) * 22,
-                    dy: (Math.random() - 0.5) * 22,
-                    size: Math.random() * 4 + 1,
+                    dx: (Math.random() - 0.5) * 18,
+                    dy: (Math.random() - 0.5) * 18,
+                    size: Math.random() * 3 + 1,
                     color: `hsl(${hue}, 100%, 60%)`,
                     life: 100, opacity: 1
                 });
@@ -213,7 +208,7 @@
             ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             particles.forEach((p, i) => {
-                p.x += p.dx; p.y += p.dy; p.dy += 0.15; p.life--; p.opacity -= 0.01;
+                p.x += p.dx; p.y += p.dy; p.dy += 0.12; p.life--; p.opacity -= 0.01;
                 ctx.globalAlpha = p.opacity;
                 ctx.fillStyle = p.color;
                 ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
@@ -226,37 +221,49 @@
         function celebrate() {
             if(isCelebrating) return;
             isCelebrating = true;
-
             heartBtn.style.display = 'none';
-            introText.style.opacity = '0'; // ടെക്സ്റ്റ് മാറ്റുന്നു
+            introText.style.opacity = '0';
             setTimeout(() => introText.style.display = 'none', 500);
-
             card.classList.add('pop-animation');
             photo.style.display = 'block';
-            
             music.volume = 0.8;
             music.play();
-
             setInterval(() => {
-                createFirework(Math.random() * canvas.width, Math.random() * canvas.height);
-            }, 700);
+                createFirework(Math.random() * canvas.width, Math.random() * canvas.height * 0.7);
+            }, 800);
         }
 
-        document.addEventListener('mousemove', function(e) {
-            const h = document.createElement('div');
-            h.innerHTML = '❤️';
-            h.className = 'trail';
-            h.style.left = e.clientX - 25 + 'px';
-            h.style.top = e.clientY - 25 + 'px';
-            document.body.appendChild(h);
-            setTimeout(() => { h.remove(); }, 1200);
+        // --- MOTION LOGIC ---
 
-            if(isCelebrating) {
-                const moveX = (e.clientX - window.innerWidth / 2) / 15;
-                const moveY = (e.clientY - window.innerHeight / 2) / 15;
-                card.style.transform = `rotateY(${moveX}deg) rotateX(${-moveY}deg)`;
-                photo.style.transform = `translateZ(200px) translateX(${moveX * 2.5}px) translateY(${moveY * 2.5}px) scale(1.1)`;
-            }
+        function updateMotion(x, y) {
+            if(!isCelebrating) return;
+            // Card Tilt
+            card.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+            // Independent Photo Motion (Parallax)
+            photo.style.transform = `translateZ(180px) translateX(${x * 1.8}px) translateY(${y * 1.8}px)`;
+        }
+
+        // Mouse Motion (Desktop)
+        document.addEventListener('mousemove', (e) => {
+            const h = document.createElement('div');
+            h.innerHTML = '❤️'; h.className = 'trail';
+            h.style.left = e.clientX - 20 + 'px'; h.style.top = e.clientY - 20 + 'px';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 1000);
+
+            const mx = (e.clientX - window.innerWidth / 2) / 15;
+            const my = (e.clientY - window.innerHeight / 2) / 15;
+            updateMotion(mx, my);
+        });
+
+        // Tilt Motion (Mobile)
+        window.addEventListener('deviceorientation', (e) => {
+            if (e.beta === null || e.gamma === null) return;
+            // Gamma is left/right tilt (-90 to 90)
+            // Beta is front/back tilt (-180 to 180)
+            const tiltX = e.gamma / 2.5; 
+            const tiltY = (e.beta - 45) / 2.5; // Adjusted for natural holding angle
+            updateMotion(tiltX, tiltY);
         });
     </script>
 </body>
