@@ -16,6 +16,7 @@ html, body {
 }
 body { position: relative; }
 
+/* Hearts canvas */
 canvas#heartsCanvas {
   position: fixed;
   top:0; left:0;
@@ -23,9 +24,31 @@ canvas#heartsCanvas {
   z-index:0;
 }
 
+/* Sliding background wrapper */
+.background-wrapper {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  z-index:-1;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.bg-slide {
+  width:100%;
+  height:100vh;
+  background-image: url('images/Blank-Watercolor-Background-Invitation-Template-edit-online.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+  flex-shrink: 0;
+  transition: transform 1s ease;
+}
+
+/* Sections (cards) */
 section {
   width: calc(100% - 20px);          /* 10px left & right margin */
-  height: calc(100% - 30px);        /* 30px top & bottom margin */
+  height: calc(100vh - 60px);        /* 30px top & bottom margin */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -36,8 +59,6 @@ section {
   transform: translateY(50px);
   transition: transform 1s ease, opacity 1s ease;
   position: relative;
-  background-size: cover;
-  background-position: center;
   border: 1px solid rgba(255,255,255,0.3);
   border-radius: 15px;
   backdrop-filter: blur(10px) saturate(150%);
@@ -45,31 +66,10 @@ section {
   margin: 30px 10px;                 /* 30px top & bottom, 10px left & right */
   scroll-snap-align: start;
   overflow: hidden;
-
+  z-index: 1;
 }
 
 section.visible { opacity:1; transform: translateY(0); }
-
-section::before {
-  content: "";
-  position: absolute;
-  top:0; left:0; width:100%; height:100%;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: cover;
-  opacity: 0.4;
-  pointer-events: none;
-  z-index:0;
-  transition: transform 1.5s ease;
-}
-
-/* Use same placeholder image for all sections */
-#section1::before,
-#section2::before,
-#section3::before,
-#section4::before {
-  background-image: url('Blank-Watercolor-Background-Invitation-Template-edit-online.png');
-}
 
 h1,h2,p { margin:10px 0; color:#2c3e50; z-index:1; position: relative; }
 h1 { font-family:'Brush Script MT', cursive; font-size:3rem; color:#4DA6FF; }
@@ -95,9 +95,10 @@ h2 { font-size:2.5rem; color:#66CC99; }
 
 .floral { width:80px; opacity:0.7; margin-bottom:20px; z-index:1; position: relative; }
 
+/* Down arrow */
 .down-arrow {
   position: absolute;
-  bottom: 10px;               /* 10px above section bottom */
+  bottom: 10px;               
   left: 50%;
   transform: translateX(-50%);
   width:50px; 
@@ -117,7 +118,16 @@ h2 { font-size:2.5rem; color:#66CC99; }
 </style>
 </head>
 <body>
+
 <canvas id="heartsCanvas"></canvas>
+
+<!-- Sliding Backgrounds -->
+<div class="background-wrapper">
+  <div class="bg-slide"></div>
+  <div class="bg-slide"></div>
+  <div class="bg-slide"></div>
+  <div class="bg-slide"></div>
+</div>
 
 <section id="section1">
   <img src="images/floral.png" class="floral" alt="Floral Ornament">
@@ -163,8 +173,20 @@ sections.forEach(s=>observer.observe(s));
 document.querySelectorAll('.down-arrow').forEach((arrow,i)=>{
   arrow.addEventListener('click',()=>{
     if(i+1<sections.length){
-      sections[i+1].scrollIntoView({behavior:'smooth', block:'start'});
+      const nextSection = sections[i+1];
+      const offsetTop = nextSection.offsetTop;
+      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
     }
+  });
+});
+
+// Sliding background sync with scroll
+const bgSlides = document.querySelectorAll('.bg-slide');
+window.addEventListener('scroll', ()=>{
+  let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  bgSlides.forEach((bg,i)=>{
+    // Move each background slightly slower for parallax effect
+    bg.style.transform = `translateY(${ -scrollTop * 0.2 * (i+1)}px)`;
   });
 });
 
@@ -215,18 +237,11 @@ function animate(){
 }
 animate();
 
-// Scroll-reactive speed + background zoom
+// Scroll-reactive speed
 window.addEventListener('scroll',()=>{
   let st=window.pageYOffset || document.documentElement.scrollTop;
   scrollSpeed = Math.min(Math.abs(st-lastScrollTop)/50 + 1, 5);
   lastScrollTop=st<=0?0:st;
-
-  sections.forEach(section=>{
-    const rect = section.getBoundingClientRect();
-    const visiblePercent = 1 - Math.abs(rect.top / window.innerHeight);
-    section.querySelector('::before');
-    section.style.backgroundSize = `${100 + 5*visiblePercent}% auto`;
-  });
 });
 </script>
 </body>
