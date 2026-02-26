@@ -3,166 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save the Date</title>
+    <title>Save the Date | Alex & Taylor</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #0d1117;
-            --envelope-color: #161b22;
-            --flap-color: #21262d;
-            --accent-color: #238636; /* GitHub Green */
-            --text-main: #e6edf3;
-            --card-bg: #ffffff;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --bg: #fdfaf7;
+            --env-color: #ffffff;
+            --env-border: #e0d8cf;
+            --accent: #b8860b; /* Dark Goldenrod */
+            --text: #333333;
         }
 
         body {
-            background-color: var(--bg-color);
+            background-color: var(--bg);
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            font-family: 'Georgia', serif;
             overflow: hidden;
         }
 
-        /* Container for the whole interaction */
-        .container {
+        .scene {
+            perspective: 1500px;
+            width: 320px;
+            height: 220px;
             position: relative;
-            cursor: pointer;
-            width: 300px;
-            height: 200px;
         }
 
-        /* The main envelope body */
-        .envelope-wrapper {
+        .envelope {
             position: relative;
             width: 100%;
             height: 100%;
-            background-color: var(--envelope-color);
-            border-radius: 0 0 8px 8px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--env-color);
+            border: 1px solid var(--env-border);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
+            transform-style: preserve-3d;
+            transition: transform 0.8s ease;
+            cursor: pointer;
         }
 
-        /* The Flap (Top triangle) */
+        /* The Opening Flap */
         .flap {
             position: absolute;
             top: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-top: 110px solid var(--flap-color);
+            width: 100%;
+            height: 100%;
+            background: var(--env-color);
+            border: 1px solid var(--env-border);
+            clip-path: polygon(0 0, 100% 0, 50% 50%);
             transform-origin: top;
-            transition: transform 0.5s ease-in-out, z-index 0.3s;
-            z-index: 3;
+            transition: transform 0.6s ease-in-out, z-index 0.2s;
+            z-index: 5;
         }
 
-        /* The Front (Pocket) */
-        .front {
+        /* The Pocket Sides */
+        .pocket {
             position: absolute;
-            bottom: 0;
-            width: 0;
-            height: 0;
-            border-left: 150px solid transparent;
-            border-right: 150px solid transparent;
-            border-bottom: 100px solid var(--envelope-color);
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--env-color);
+            clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
             z-index: 4;
-            filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.2));
+            border: 1px solid var(--env-border);
         }
 
-        /* The Card inside */
-        .letter {
+        /* The Wedding Card */
+        .card {
             position: absolute;
-            bottom: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            top: 5%;
+            left: 5%;
             width: 90%;
             height: 90%;
-            background: var(--card-bg);
-            border-radius: 4px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.6s ease-in-out;
+            background: white;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
             z-index: 2;
+            padding: 30px 15px;
+            text-align: center;
+            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
             display: flex;
             flex-direction: column;
             justify-content: center;
-            color: #1f2328;
+            border: 2px solid #f9f9f9;
         }
 
-        .letter h1 { font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-color); }
-        .letter p { font-size: 0.9rem; margin: 2px 0; }
-        .letter .date { font-weight: bold; margin-top: 10px; }
+        .card h1 { font-size: 1.4rem; color: var(--accent); margin-bottom: 10px; font-weight: normal; letter-spacing: 2px; }
+        .card p { font-size: 0.85rem; color: var(--text); line-height: 1.8; margin: 0; }
+        .card .names { font-size: 1.3rem; margin: 10px 0; font-style: italic; color: #000; }
 
-        /* Animation States */
-        .container.open .flap {
+        /* Animation Classes */
+        .is-open .flap {
             transform: rotateX(180deg);
             z-index: 1;
         }
 
-        .container.open .letter {
-            transform: translate(-50%, -120px); /* Moves card up */
+        .is-open .card {
+            transform: translateY(-180px) scale(1.15);
+            z-index: 10;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
         }
 
-        /* Instruction text */
-        .hint {
+        /* Floating interaction text */
+        .instruction {
             position: absolute;
-            bottom: -50px;
+            bottom: -60px;
             width: 100%;
             text-align: center;
-            color: #8b949e;
-            font-size: 0.8rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.5; }
-            50% { opacity: 1; }
-            100% { opacity: 0.5; }
-        }
-
-        /* Mobile adjustments */
-        @media (max-width: 400px) {
-            .container { width: 260px; height: 180px; }
-            .flap { border-left-width: 130px; border-right-width: 130px; border-top-width: 100px; }
-            .front { border-left-width: 130px; border-right-width: 130px; border-bottom-width: 90px; }
+            color: #888;
+            font-size: 0.75rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <div class="container" id="cardContainer">
-        <div class="envelope-wrapper">
+    <div class="scene" id="envelopeScene">
+        <div class="envelope" onclick="toggleEnvelope()">
             <div class="flap"></div>
-            <div class="letter">
-                <h1>Save the Date</h1>
-                <p>We are getting married!</p>
-                <p><strong>Alex & Sam</strong></p>
-                <p class="date">October 24, 2026</p>
-                <p style="font-size: 10px; color: #666; margin-top: 15px;">New York City</p>
+            
+            <div class="card">
+                <p>WE ARE GETTING MARRIED</p>
+                <div class="names">Alex & Taylor</div>
+                <p>OCTOBER 24, 2026</p>
+                <p>NEW YORK CITY</p>
+                <div style="margin-top: 15px; font-size: 0.6rem; color: #aaa;">TAP TO CLOSE</div>
             </div>
-            <div class="front"></div>
+
+            <div class="pocket"></div>
         </div>
-        <div class="hint">Tap to Open</div>
+        <div class="instruction" id="hint">Tap to Open</div>
     </div>
 
     <script>
-        const container = document.getElementById('cardContainer');
-        const hint = document.querySelector('.hint');
+        let isOpen = false;
 
-        container.addEventListener('click', () => {
-            container.classList.toggle('open');
-            if (container.classList.contains('open')) {
-                hint.textContent = "Click to Close";
+        function toggleEnvelope() {
+            const scene = document.getElementById('envelopeScene');
+            const hint = document.getElementById('hint');
+            
+            isOpen = !isOpen;
+
+            if (isOpen) {
+                scene.classList.add('is-open');
+                hint.style.opacity = "0";
+                
+                // Trigger Confetti!
+                confetti({
+                    particleCount: 150,
+                    spread: 70,
+                    origin: { y: 0.6 },
+                    colors: ['#b8860b', '#fdfaf7', '#e0d8cf']
+                });
             } else {
-                hint.textContent = "Tap to Open";
+                scene.classList.remove('is-open');
+                hint.style.opacity = "1";
             }
-        });
+        }
     </script>
 </body>
 </html>
