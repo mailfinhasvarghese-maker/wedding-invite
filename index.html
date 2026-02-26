@@ -10,6 +10,7 @@
             --curtain-color: #8b0000; /* Deep Red Curtains */
             --gold: #d4af37;
             --text-dark: #2c3e50;
+            --card-bg: #fff8f0;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -24,7 +25,7 @@
             font-family: 'Georgia', serif;
         }
 
-        /* The Stage */
+        /* Stage */
         .stage {
             position: relative;
             width: 100vw;
@@ -35,7 +36,7 @@
             perspective: 1200px;
         }
 
-        /* The Curtains */
+        /* Curtains */
         .curtain {
             position: absolute;
             top: 0;
@@ -62,24 +63,26 @@
             justify-content: flex-start;
         }
 
-        /* Animation for curtains opening */
+        /* Curtain animation */
         .open .curtain.left { transform: translateX(-100%); }
         .open .curtain.right { transform: translateX(100%); }
 
-        /* Full Screen Invitation Card */
+        /* Card */
         .card {
             position: absolute;
             width: 90%;
-            max-width: 500px;
-            height: 85%;
-            background: white;
-            border-radius: 10px;
+            max-width: 480px;
+            height: auto;
+            max-height: 85%;
+            background: var(--card-bg);
+            border-radius: 20px;
             overflow-y: auto;
             transform: scale(0.8);
             opacity: 0;
             transition: all 1.2s ease 0.5s;
             z-index: 5;
             box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+            border: 3px solid var(--gold);
         }
 
         .open .card {
@@ -89,19 +92,25 @@
 
         .card-content {
             text-align: center;
-            background-image: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.9)), 
-                              url('https://i.imgur.com/G5gDkS1.jpg');
-            background-size: cover;
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
             padding: 40px 20px;
+            border-radius: 20px;
+            position: relative;
         }
 
-        /* Decorative Elements */
-        .ornament { width: 80px; margin-bottom: 20px; }
-        
+        /* Decorative Floral Corners */
+        .floral-top-left, .floral-bottom-right {
+            position: absolute;
+            width: 80px;
+            opacity: 0.8;
+        }
+        .floral-top-left { top: 10px; left: 10px; transform: rotate(0deg); }
+        .floral-bottom-right { bottom: 10px; right: 10px; transform: rotate(180deg); }
+
+        /* Text Styles */
         h2 { font-family: 'Brush Script MT', cursive; color: var(--curtain-color); font-size: 2.5rem; margin-bottom: 10px; }
-        h1 { font-size: 2rem; margin: 15px 0; letter-spacing: 2px; }
+        h1 { font-size: 2rem; margin: 15px 0; letter-spacing: 2px; color: var(--text-dark); }
         .date { font-weight: bold; font-size: 1.2rem; margin: 20px 0; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; padding: 10px 0; }
-        
         .venue { font-style: italic; color: #555; margin-bottom: 30px; }
 
         /* Buttons */
@@ -111,12 +120,15 @@
             padding: 15px;
             margin: 10px 0;
             text-decoration: none;
-            border-radius: 5px;
+            border-radius: 30px;
             font-weight: bold;
             text-transform: uppercase;
+            transition: 0.3s;
         }
         .btn-rsvp { background: var(--curtain-color); color: white; }
-        .btn-map { background: transparent; color: #333; border: 1px solid #ccc; }
+        .btn-rsvp:hover { background: #a50000; }
+        .btn-map { background: transparent; color: #333; border: 2px solid var(--gold); }
+        .btn-map:hover { background: var(--gold); color: white; }
 
         /* Center Opener Button */
         .opener-btn {
@@ -134,6 +146,9 @@
         }
         .open .opener-btn { display: none; }
 
+        /* Scrollbar for card */
+        .card::-webkit-scrollbar { width: 6px; }
+        .card::-webkit-scrollbar-thumb { background: var(--curtain-color); border-radius: 3px; }
     </style>
 </head>
 <body>
@@ -146,7 +161,10 @@
 
         <div class="card">
             <div class="card-content">
-                <img src="https://cdn-icons-png.flaticon.com/512/3561/3561331.png" class="ornament" alt="Floral Icon">
+                <!-- Floral decorations -->
+                <img src="https://i.imgur.com/BlF3N7X.png" class="floral-top-left" alt="Floral Top">
+                <img src="https://i.imgur.com/BlF3N7X.png" class="floral-bottom-right" alt="Floral Bottom">
+
                 <h2>Wedding Ceremony</h2>
                 <p>We joyfully invite you to the wedding of</p>
                 <h1>Franky & Reena</h1>
