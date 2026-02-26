@@ -1,262 +1,167 @@
 <!DOCTYPE html>
-<html lang="ml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>For My Kuttappi ❤️</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Save the Date</title>
     <style>
-        body {
-            background-color: #000;
-            margin: 0; padding: 0;
-            overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            display: flex; justify-content: center; align-items: center;
-            height: 100vh; width: 100vw;
-            perspective: 1500px;
+        :root {
+            --bg-color: #0d1117;
+            --envelope-color: #161b22;
+            --flap-color: #21262d;
+            --accent-color: #238636; /* GitHub Green */
+            --text-main: #e6edf3;
+            --card-bg: #ffffff;
         }
 
-        canvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Container for the whole interaction */
+        .container {
+            position: relative;
+            cursor: pointer;
+            width: 300px;
+            height: 200px;
+        }
+
+        /* The main envelope body */
+        .envelope-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--envelope-color);
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        /* The Flap (Top triangle) */
+        .flap {
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-top: 110px solid var(--flap-color);
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out, z-index 0.3s;
+            z-index: 3;
+        }
+
+        /* The Front (Pocket) */
+        .front {
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            border-bottom: 100px solid var(--envelope-color);
+            z-index: 4;
+            filter: drop-shadow(0 -2px 5px rgba(0,0,0,0.2));
+        }
+
+        /* The Card inside */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            height: 90%;
+            background: var(--card-bg);
+            border-radius: 4px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.6s ease-in-out;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: #1f2328;
+        }
+
+        .letter h1 { font-size: 1.2rem; margin-bottom: 10px; color: var(--accent-color); }
+        .letter p { font-size: 0.9rem; margin: 2px 0; }
+        .letter .date { font-weight: bold; margin-top: 10px; }
+
+        /* Animation States */
+        .container.open .flap {
+            transform: rotateX(180deg);
             z-index: 1;
         }
 
-        #intro-text {
-            position: fixed;
-            top: 15%;
-            text-align: center;
-            width: 100%;
-            z-index: 80;
-            transition: opacity 0.5s ease;
+        .container.open .letter {
+            transform: translate(-50%, -120px); /* Moves card up */
         }
 
-        #intro-text h1 {
-            color: #fff;
-            font-size: clamp(1.8rem, 5vw, 3rem);
-            text-shadow: 0 0 15px #ff4d6d;
-            margin-bottom: 10px;
-        }
-
-        #intro-text p {
-            color: #ffafcc;
-            font-size: clamp(1rem, 3vw, 1.5rem);
-        }
-
-        .card {
-            background: rgba(25, 25, 25, 0.9);
-            padding: 50px 30px 40px;
-            border-radius: 30px;
-            box-shadow: 0 0 60px rgba(255, 77, 109, 0.3);
-            text-align: center;
-            z-index: 10;
-            border: 1.5px solid rgba(255, 255, 255, 0.1);
-            max-width: 400px;
-            width: 85%;
-            backdrop-filter: blur(15px);
-            transform-style: preserve-3d;
-            display: none;
-            opacity: 0;
-        }
-
-        .pop-animation {
-            display: block;
-            animation: cardReveal 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-        }
-
-        @keyframes cardReveal {
-            0% { transform: scale(0) rotateY(45deg) translateZ(-200px); opacity: 0; }
-            100% { transform: scale(1) rotateY(0deg) translateZ(0); opacity: 1; }
-        }
-
-        .couple-photo {
-            width: clamp(180px, 40vw, 250px);
-            height: clamp(180px, 40vw, 250px);
-            border-radius: 50%;
-            object-fit: cover;
-            border: 6px solid #fff;
+        /* Instruction text */
+        .hint {
             position: absolute;
-            top: -125px;
-            left: 50%;
-            margin-left: clamp(-90px, -20vw, -125px);
-            z-index: 50;
-            box-shadow: 0 30px 60px rgba(0,0,0,0.9);
-            transition: transform 0.1s ease-out;
-            display: none;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            color: #8b949e;
+            font-size: 0.8rem;
+            animation: pulse 2s infinite;
         }
 
-        /* Funny Wiggling Heart */
-        .heart {
-            color: #ff4d6d;
-            font-size: clamp(80px, 15vw, 120px);
-            cursor: pointer;
-            display: inline-block;
-            position: fixed;
-            left: 50%;
-            top: 55%;
-            transform: translate(-50%, -50%);
-            z-index: 100;
-            /* Funny jump transition */
-            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-            animation: funnyPulse 1s infinite alternate;
+        @keyframes pulse {
+            0% { opacity: 0.5; }
+            50% { opacity: 1; }
+            100% { opacity: 0.5; }
         }
 
-        @keyframes funnyPulse {
-            0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
-            50% { transform: translate(-50%, -50%) scale(1.1) rotate(5deg); }
-            100% { transform: translate(-50%, -50%) scale(1) rotate(-5deg); }
-        }
-
-        #title-msg { color: #fff; margin-top: 80px; font-size: clamp(1.4rem, 4vw, 2rem); }
-        #secret-message { color: #eee; margin-top: 20px; line-height: 1.6; font-size: 1.1rem; }
-
-        .trail {
-            position: fixed;
-            pointer-events: none;
-            color: #ff4d6d;
-            z-index: 9999;
-            font-size: 40px !important;
-            animation: floatAway 1.2s ease-out forwards;
-            text-shadow: 0 0 10px #ff4d6d;
-        }
-
-        @keyframes floatAway {
-            0% { transform: translateY(0) scale(1); opacity: 1; }
-            100% { transform: translateY(-120px) rotate(30deg) scale(0.5); opacity: 0; }
+        /* Mobile adjustments */
+        @media (max-width: 400px) {
+            .container { width: 260px; height: 180px; }
+            .flap { border-left-width: 130px; border-right-width: 130px; border-top-width: 100px; }
+            .front { border-left-width: 130px; border-right-width: 130px; border-bottom-width: 90px; }
         }
     </style>
 </head>
 <body>
 
-    <canvas id="canvas"></canvas>
-    <audio id="bg-music" src="firework.mp3" preload="auto" loop></audio>
-
-    <div id="intro-text">
-        <h1>എന്റെ കുട്ടാപ്പിക്ക്‌ ❤️</h1>
-        <p>ഈ ❤️ ചിഹ്നത്തിലൊന്ന് ക്ലിക്കിക്കോളൂ...</p>
-    </div>
-
-    <div class="card" id="main-card">
-        <img id="main-photo" src="https://i.ibb.co/B5n35GZQ/Whats-App-Image-2026-02-11-at-2-12-29-PM.jpg" class="couple-photo" alt="Us">
-        <h1 id="title-msg">I Love You Forever!</h1>
-        <div id="secret-message">
-            എന്റെ ചക്കരയാട്ടോ ❤️.....<br>
-            Happy Valentines Day Dear. <br><br>
-            You are the best thing that ever happened to me. Every day with you feels like a gift. ❤️
+    <div class="container" id="cardContainer">
+        <div class="envelope-wrapper">
+            <div class="flap"></div>
+            <div class="letter">
+                <h1>Save the Date</h1>
+                <p>We are getting married!</p>
+                <p><strong>Alex & Sam</strong></p>
+                <p class="date">October 24, 2026</p>
+                <p style="font-size: 10px; color: #666; margin-top: 15px;">New York City</p>
+            </div>
+            <div class="front"></div>
         </div>
+        <div class="hint">Tap to Open</div>
     </div>
-
-    <div id="heart-btn" class="heart" onclick="handleHeartClick()">❤️</div>
 
     <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        const photo = document.getElementById('main-photo');
-        const card = document.getElementById('main-card');
-        const heartBtn = document.getElementById('heart-btn');
-        const introText = document.getElementById('intro-text');
-        const music = document.getElementById('bg-music');
-        
-        let clickCount = 0;
-        let isCelebrating = false;
-        let hearts = [];
+        const container = document.getElementById('cardContainer');
+        const hint = document.querySelector('.hint');
 
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resize);
-        resize();
-
-        function handleHeartClick() {
-            clickCount++;
-            
-            // Add a temporary "oops" shake effect
-            heartBtn.style.animation = 'none';
-            setTimeout(() => heartBtn.style.animation = 'funnyPulse 0.3s infinite alternate', 10);
-
-            if (clickCount < 5) {
-                // Generate funny random coordinates
-                const padding = 100;
-                const newX = Math.random() * (window.innerWidth - padding * 2) + padding;
-                const newY = Math.random() * (window.innerHeight - padding * 2) + padding;
-                
-                heartBtn.style.left = newX + 'px';
-                heartBtn.style.top = newY + 'px';
+        container.addEventListener('click', () => {
+            container.classList.toggle('open');
+            if (container.classList.contains('open')) {
+                hint.textContent = "Click to Close";
             } else {
-                celebrate();
+                hint.textContent = "Tap to Open";
             }
-        }
-
-        class WhiteHeart {
-            constructor() { this.reset(); this.y = Math.random() * canvas.height; }
-            reset() {
-                this.x = Math.random() * canvas.width;
-                this.y = canvas.height + 50;
-                this.size = Math.random() * 12 + 8;
-                this.speed = Math.random() * 1.5 + 0.5;
-                this.drift = (Math.random() - 0.5) * 0.8;
-                this.opacity = Math.random() * 0.4 + 0.2;
-            }
-            update() {
-                this.y -= this.speed;
-                this.x += this.drift;
-                if (this.y < -50) this.reset();
-            }
-            draw() {
-                ctx.globalAlpha = this.opacity;
-                ctx.fillStyle = "white";
-                ctx.font = `${this.size}px serif`;
-                ctx.fillText("🤍", this.x, this.y);
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            if(isCelebrating) {
-                hearts.forEach(h => { h.update(); h.draw(); });
-            }
-            requestAnimationFrame(animate);
-        }
-        animate();
-
-        function celebrate() {
-            if(isCelebrating) return;
-            isCelebrating = true;
-            heartBtn.style.display = 'none';
-            introText.style.opacity = '0';
-            setTimeout(() => introText.style.display = 'none', 500);
-            card.classList.add('pop-animation');
-            photo.style.display = 'block';
-            music.volume = 0.8;
-            music.play();
-            for(let i=0; i<100; i++) hearts.push(new WhiteHeart());
-        }
-
-        function updateMotion(x, y) {
-            if(!isCelebrating) return;
-            card.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
-            photo.style.transform = `translateZ(180px) translateX(${x * 2.2}px) translateY(${y * 2.2}px)`;
-        }
-
-        document.addEventListener('mousemove', (e) => {
-            const h = document.createElement('div');
-            h.innerHTML = '❤️'; h.className = 'trail';
-            h.style.left = e.clientX - 20 + 'px'; h.style.top = e.clientY - 20 + 'px';
-            document.body.appendChild(h);
-            setTimeout(() => h.remove(), 1000);
-
-            const mx = (e.clientX - window.innerWidth / 2) / 15;
-            const my = (e.clientY - window.innerHeight / 2) / 15;
-            updateMotion(mx, my);
-        });
-
-        window.addEventListener('deviceorientation', (e) => {
-            if (e.beta === null || e.gamma === null) return;
-            const tiltX = e.gamma / 2.5; 
-            const tiltY = (e.beta - 45) / 2.5;
-            updateMotion(tiltX, tiltY);
         });
     </script>
 </body>
