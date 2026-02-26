@@ -59,14 +59,16 @@ section::before {
   opacity: 0.4;
   pointer-events: none;
   z-index:0;
-  transition: transform 1.5s ease; /* background zoom */
+  transition: transform 1.5s ease;
 }
 
-/* Background images */
-#section1::before { background-image: url('images/blue-hearts.png'); }
-#section2::before { background-image: url('images/green-floral.png'); }
-#section3::before { background-image: url('images/rings.png'); }
-#section4::before { background-image: url('images/floral.png'); }
+/* Use same placeholder image for all sections */
+#section1::before,
+#section2::before,
+#section3::before,
+#section4::before {
+  background-image: url('images/Blank-Watercolor-Background-Invitation-Template-edit-online.png');
+}
 
 h1,h2,p { margin:10px 0; color:#2c3e50; z-index:1; position: relative; }
 h1 { font-family:'Brush Script MT', cursive; font-size:3rem; color:#4DA6FF; }
@@ -211,8 +213,6 @@ window.addEventListener('scroll',()=>{
   sections.forEach(section=>{
     const rect = section.getBoundingClientRect();
     const visiblePercent = 1 - Math.abs(rect.top / window.innerHeight);
-    section.querySelector('::before'); // not needed directly
-    section.style.setProperty('--zoom', 1 + 0.05*visiblePercent);
     section.querySelector('::before');
     section.style.backgroundSize = `${100 + 5*visiblePercent}% auto`;
   });
