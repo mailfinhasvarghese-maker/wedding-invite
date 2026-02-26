@@ -7,11 +7,12 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg: #eef7ff;
+            --bg: #f7f9fc;
             --env-color: #ffffff;
-            --env-border: #cfd9e5;
-            --accent-red: #b30000;
+            --env-border: #dbe4ef;
+            --accent-red: #8b0000; /* Deep, modern red */
             --gold: #d4af37;
+            --text-dark: #333333;
         }
 
         body {
@@ -21,14 +22,14 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
-            font-family: 'Times New Roman', Times, serif;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
             overflow: hidden;
         }
 
         .scene {
             perspective: 1500px;
-            width: 350px;
-            height: 250px;
+            width: 360px;
+            height: 260px;
             position: relative;
         }
 
@@ -38,7 +39,7 @@
             height: 100%;
             background: var(--env-color);
             border: 1px solid var(--env-border);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.08);
             transform-style: preserve-3d;
             transition: transform 0.8s ease;
             cursor: pointer;
@@ -49,7 +50,7 @@
             top: 0;
             width: 100%;
             height: 100%;
-            background: #fdfdfd;
+            background: #fcfcfc;
             border: 1px solid var(--env-border);
             clip-path: polygon(0 0, 100% 0, 50% 50%);
             transform-origin: top;
@@ -68,7 +69,7 @@
             border: 1px solid var(--env-border);
         }
 
-        /* The Scrollable Card */
+        /* Fully Decorated, Scrollable Invitation Card */
         .card {
             position: absolute;
             top: 5%;
@@ -78,79 +79,155 @@
             background: white;
             z-index: 2;
             transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-            border: 1px solid #f0f0f0;
+            border: 1px solid #e1e8ed;
             overflow-y: auto;
             scrollbar-width: thin;
         }
 
-        .card-content {
-            padding-bottom: 30px;
-            text-align: center;
-        }
-
-        /* Image from your upload */
-        .invite-image {
+        /* Container for the Decorated Invitation Design */
+        .decorated-invitation {
+            position: relative;
             width: 100%;
-            height: auto;
+            background-color: white;
+            /* Modern, luxurious, fully decorated background (linear gradient + floral pattern) */
+            background-image: linear-gradient(to bottom, rgba(255,255,255,0.95), rgba(255,255,255,0.85)), 
+                              url('https://i.imgur.com/G5gDkS1.jpg'); /* Gold geometric floral pattern */
+            background-size: cover;
+            background-repeat: repeat;
+            text-align: center;
+            min-height: 120%; /* Makes it longer than the envelope */
+            padding-bottom: 40px;
+        }
+
+        /* Decorative header element */
+        .decorated-invitation::before {
+            content: '';
             display: block;
+            width: 100%;
+            height: 250px;
+            background-image: url('https://i.imgur.com/gK2T39X.png'); /* Top floral watercolor pattern */
+            background-size: cover;
+            background-position: top;
         }
 
-        .details-box {
-            padding: 20px;
-            color: #333;
+        .invitation-details {
+            padding: 0 25px;
+            color: var(--text-dark);
         }
 
-        .details-box h2 { 
-            font-family: 'Brush Script MT', cursive; 
-            color: var(--accent-red); 
-            font-size: 2rem;
-            margin-bottom: 5px;
+        .invitation-details h2 { 
+            font-family: 'Helvetica Neue UltraLight', sans-serif;
+            font-weight: 100;
+            color: var(--accent-red);
+            font-size: 1.8rem;
+            margin-bottom: 0px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
         }
 
-        .venue-text {
+        .invitation-details h1 { 
+            font-family: 'Georgia', serif;
+            font-size: 2.2rem;
+            font-weight: 300;
+            margin: 10px 0;
+            color: #000;
+            letter-spacing: 1px;
+        }
+
+        .invitation-details h1 span {
+            font-family: 'Times New Roman', serif;
+            font-size: 1rem;
+            color: #666;
+            vertical-align: middle;
+            margin: 0 5px;
+        }
+
+        .invitation-details p {
+            font-size: 1rem;
+            line-height: 1.6;
+            margin: 8px 0;
+        }
+
+        .event-details {
             font-size: 0.95rem;
+            margin-top: 25px;
+            border-top: 1px solid #eaeaea;
+            padding-top: 20px;
+            color: #555;
+        }
+
+        .event-details p strong {
+            color: #000;
+        }
+
+        /* Location Box */
+        .location-info {
+            background-color: rgba(255,255,255,0.7);
+            border: 1px solid #eaeaea;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+        }
+
+        .location-info h4 {
+            margin: 0 0 10px 0;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+        }
+
+        .location-info p {
+            font-size: 0.9rem;
+            color: #666;
             line-height: 1.5;
-            margin: 15px 0;
+            margin: 0;
         }
 
         /* Interactive Buttons */
         .btn-group {
             display: flex;
-            flex-direction: column;
-            gap: 10px;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 30px;
             padding: 0 20px;
         }
 
         .btn {
-            padding: 12px;
+            flex: 1;
+            padding: 14px 10px;
             text-decoration: none;
-            border-radius: 5px;
-            font-size: 0.85rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
             font-weight: bold;
             text-transform: uppercase;
+            letter-spacing: 1px;
             transition: 0.3s;
+            text-align: center;
         }
 
-        .btn-rsvp { background: var(--accent-red); color: white; }
-        .btn-map { background: #f4f4f4; color: #333; border: 1px solid #ddd; }
+        .btn-rsvp { background: var(--accent-red); color: white; border: 1px solid var(--accent-red); }
+        .btn-map { background: transparent; color: #444; border: 1px solid #ddd; }
 
-        /* Animation Triggered by JS */
+        /* Animation States */
         .is-open .flap { transform: rotateX(180deg); z-index: 1; }
         .is-open .card {
-            transform: translateY(-320px) scale(1.1);
+            transform: translateY(-300px) scale(1.1);
             z-index: 10;
-            height: 500px;
-            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+            height: 480px; /* Fully expands to fit content */
+            box-shadow: 0 30px 90px rgba(0,0,0,0.22);
         }
 
-        .hint {
+        /* Floating interaction text */
+        .instruction {
             position: absolute;
-            bottom: -50px;
+            bottom: -60px;
             width: 100%;
             text-align: center;
-            color: #666;
+            color: #777;
             font-size: 0.8rem;
-            letter-spacing: 1px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -161,22 +238,27 @@
             <div class="flap"></div>
             
             <div class="card" id="scrollCard">
-                <div class="card-content">
-                    <img src="invite.jpg" alt="Wedding Invite" class="invite-image">
+                <div class="decorated-invitation">
                     
-                    <div class="details-box">
-                        <h2>Wedding Ceremony</h2>
-                        <p><strong>Franky & Reena</strong></p>
-                        <p class="venue-text">
-                            Wedenesday, 19th Feb 2026<br>
-                            10:00 AM - 11:00 AM<br>
-                            <strong>Vivekanandapuram</strong><br>
-                            Kanyakumari, Tamil Nadu, India
-                        </p>
+                    <div class="invitation-details">
+                        <h2>Save the Date</h2>
+                        <p>Join us to celebrate the wedding of</p>
+                        <h1>Franky <span>&</span> Reena</h1>
+                        <p>We invite you to share in our joy on our special day.</p>
+                        
+                        <div class="event-details">
+                            <p>on <strong>Wednesday, 19th Feb 2026</strong></p>
+                            <p>at <strong>10:00 AM - 11:00 AM</strong></p>
+                        </div>
+
+                        <div class="location-info">
+                            <h4>The Venue</h4>
+                            <p>Vivekanandapuram,<br>Kanyakumari, Tamil Nadu, India</p>
+                        </div>
 
                         <div class="btn-group">
                             <a href="https://wa.me/YOUR_NUMBER" class="btn btn-rsvp">Confirm Attendance</a>
-                            <a href="https://maps.google.com/?q=Vivekanandapuram+Kanyakumari" target="_blank" class="btn btn-map">📍 View on Google Maps</a>
+                            <a href="http://maps.google.com/?q=Vivekanandapuram,Kanyakumari,Tamil+Nadu,India" target="_blank" class="btn btn-map">📍 View on Map</a>
                         </div>
                     </div>
                 </div>
@@ -184,31 +266,32 @@
 
             <div class="pocket"></div>
         </div>
-        <div class="hint" id="instruction">Tap to Unveil</div>
+        <div class="instruction" id="instructionText">Tap to Open</div>
     </div>
 
     <script>
         let opened = false;
 
         function openEnvelope() {
-            if (opened) return; // Keeps it open
+            if (opened) return; // Keep it open once clicked
             
             const scene = document.getElementById('mainScene');
-            const hint = document.getElementById('instruction');
+            const instruction = document.getElementById('instructionText');
             
             scene.classList.add('is-open');
-            hint.textContent = "Scroll up for more details";
+            instruction.textContent = "Scroll up for all details";
             opened = true;
 
+            // Trigger Confetti (Red, Gold, White)
             confetti({
-                particleCount: 150,
+                particleCount: 160,
                 spread: 70,
                 origin: { y: 0.7 },
-                colors: ['#b30000', '#ffffff', '#ffd700']
+                colors: ['#8b0000', '#ffffff', '#ffd700']
             });
         }
 
-        // Allow scrolling without closing
+        // Prevent closing the envelope when clicking inside the card to allow scrolling
         document.getElementById('scrollCard').addEventListener('click', (e) => {
             e.stopPropagation();
         });
