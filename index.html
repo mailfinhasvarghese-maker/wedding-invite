@@ -1,167 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Save the Date | Alex & Taylor</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <style>
-        :root {
-            --bg: #fdfaf7;
-            --env-color: #ffffff;
-            --env-border: #e0d8cf;
-            --accent: #b8860b; /* Dark Goldenrod */
-            --text: #333333;
-        }
-
-        body {
-            background-color: var(--bg);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            font-family: 'Georgia', serif;
-            overflow: hidden;
-        }
-
-        .scene {
-            perspective: 1500px;
-            width: 320px;
-            height: 220px;
-            position: relative;
-        }
-
-        .envelope {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: var(--env-color);
-            border: 1px solid var(--env-border);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.1);
-            transform-style: preserve-3d;
-            transition: transform 0.8s ease;
-            cursor: pointer;
-        }
-
-        /* The Opening Flap */
-        .flap {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--env-color);
-            border: 1px solid var(--env-border);
-            clip-path: polygon(0 0, 100% 0, 50% 50%);
-            transform-origin: top;
-            transition: transform 0.6s ease-in-out, z-index 0.2s;
-            z-index: 5;
-        }
-
-        /* The Pocket Sides */
-        .pocket {
-            position: absolute;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--env-color);
-            clip-path: polygon(0 0, 50% 50%, 100% 0, 100% 100%, 0 100%);
-            z-index: 4;
-            border: 1px solid var(--env-border);
-        }
-
-        /* The Wedding Card */
-        .card {
-            position: absolute;
-            top: 5%;
-            left: 5%;
-            width: 90%;
-            height: 90%;
-            background: white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
-            z-index: 2;
-            padding: 30px 15px;
-            text-align: center;
-            transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            border: 2px solid #f9f9f9;
-        }
-
-        .card h1 { font-size: 1.4rem; color: var(--accent); margin-bottom: 10px; font-weight: normal; letter-spacing: 2px; }
-        .card p { font-size: 0.85rem; color: var(--text); line-height: 1.8; margin: 0; }
-        .card .names { font-size: 1.3rem; margin: 10px 0; font-style: italic; color: #000; }
-
-        /* Animation Classes */
-        .is-open .flap {
-            transform: rotateX(180deg);
-            z-index: 1;
-        }
-
-        .is-open .card {
-            transform: translateY(-180px) scale(1.15);
-            z-index: 10;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-        }
-
-        /* Floating interaction text */
-        .instruction {
-            position: absolute;
-            bottom: -60px;
-            width: 100%;
-            text-align: center;
-            color: #888;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Save the Date</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <div class="scene" id="envelopeScene">
-        <div class="envelope" onclick="toggleEnvelope()">
-            <div class="flap"></div>
-            
-            <div class="card">
-                <p>WE ARE GETTING MARRIED</p>
-                <div class="names">Alex & Taylor</div>
-                <p>OCTOBER 24, 2026</p>
-                <p>NEW YORK CITY</p>
-                <div style="margin-top: 15px; font-size: 0.6rem; color: #aaa;">TAP TO CLOSE</div>
-            </div>
-
-            <div class="pocket"></div>
-        </div>
-        <div class="instruction" id="hint">Tap to Open</div>
+  <div class="envelope-container">
+    <div class="envelope">
+      <div class="flap"></div>
+      <div class="card">
+        <h1>Save the Date!</h1>
+        <p>Join us on <strong>12th December 2026</strong></p>
+        <p>Location: Dubai, UAE</p>
+      </div>
     </div>
+  </div>
 
-    <script>
-        let isOpen = false;
-
-        function toggleEnvelope() {
-            const scene = document.getElementById('envelopeScene');
-            const hint = document.getElementById('hint');
-            
-            isOpen = !isOpen;
-
-            if (isOpen) {
-                scene.classList.add('is-open');
-                hint.style.opacity = "0";
-                
-                // Trigger Confetti!
-                confetti({
-                    particleCount: 150,
-                    spread: 70,
-                    origin: { y: 0.6 },
-                    colors: ['#b8860b', '#fdfaf7', '#e0d8cf']
-                });
-            } else {
-                scene.classList.remove('is-open');
-                hint.style.opacity = "1";
-            }
-        }
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
+
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: #fdf2e9;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Envelope container */
+.envelope-container {
+  perspective: 1000px;
+}
+
+.envelope {
+  width: 300px;
+  max-width: 90vw;
+  position: relative;
+  cursor: pointer;
+}
+
+/* Envelope flap */
+.flap {
+  width: 100%;
+  height: 150px;
+  background: #e63946;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top;
+  transition: transform 1s ease;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* Card inside envelope */
+.card {
+  width: 100%;
+  background: #fff;
+  padding: 40px 20px 20px 20px;
+  text-align: center;
+  border: 2px solid #e63946;
+  border-top: none;
+  border-radius: 0 0 10px 10px;
+}
+
+/* Animation class */
+.envelope.open .flap {
+  transform: rotateX(-180deg);
+}
+
+const envelope = document.querySelector('.envelope');
+
+envelope.addEventListener('click', () => {
+  envelope.classList.toggle('open');
+});
