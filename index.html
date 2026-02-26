@@ -7,80 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="envelope-container">
-    <div class="envelope">
+  <div class="invite-container">
+    <div class="envelope" id="env">
       <div class="flap"></div>
-      <div class="card">
+      <div class="letter">
         <h1>Save the Date!</h1>
-        <p>Join us on <strong>12th December 2026</strong></p>
+        <p>We are celebrating on</p>
+        <p><strong>12 December 2026</strong></p>
         <p>Location: Dubai, UAE</p>
+        <button id="rsvpBtn">RSVP</button>
       </div>
     </div>
   </div>
 
+  <!-- Optional Confetti -->
+  <canvas id="confettiCanvas"></canvas>
+
   <script src="script.js"></script>
 </body>
 </html>
-
-/* Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  background: #fdf2e9;
-  font-family: 'Arial', sans-serif;
-}
-
-/* Envelope container */
-.envelope-container {
-  perspective: 1000px;
-}
-
-.envelope {
-  width: 300px;
-  max-width: 90vw;
-  position: relative;
-  cursor: pointer;
-}
-
-/* Envelope flap */
-.flap {
-  width: 100%;
-  height: 150px;
-  background: #e63946;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform-origin: top;
-  transition: transform 1s ease;
-  clip-path: polygon(0 0, 100% 0, 50% 100%);
-}
-
-/* Card inside envelope */
-.card {
-  width: 100%;
-  background: #fff;
-  padding: 40px 20px 20px 20px;
-  text-align: center;
-  border: 2px solid #e63946;
-  border-top: none;
-  border-radius: 0 0 10px 10px;
-}
-
-/* Animation class */
-.envelope.open .flap {
-  transform: rotateX(-180deg);
-}
-
-const envelope = document.querySelector('.envelope');
-
-envelope.addEventListener('click', () => {
-  envelope.classList.toggle('open');
-});
