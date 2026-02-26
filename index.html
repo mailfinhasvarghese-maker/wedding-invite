@@ -13,13 +13,13 @@
       height: 100%;
       scroll-behavior: smooth;
       font-family: 'Georgia', serif;
-      background: #ffffff; /* Full white background */
+      background: #ffffff;
       overflow-x: hidden;
     }
 
     section {
       width: 100%;
-      height: 100vh; /* Full screen height */
+      height: 100vh; /* Full screen */
       display: flex;
       justify-content: center;
       align-items: center;
@@ -74,7 +74,7 @@
     .btn-map { background: transparent; color: #333; border: 2px solid #8b0000; }
     .btn-map:hover { background: #8b0000; color: white; }
 
-    /* Floral decoration (optional) */
+    /* Floral decoration */
     .floral {
       width: 80px;
       opacity: 0.7;
@@ -85,7 +85,7 @@
 <body>
 
   <!-- Section 1: Couple Names -->
-  <section id="section1" class="visible">
+  <section>
     <img src="https://cdn-icons-png.flaticon.com/512/3561/3561331.png" class="floral" alt="Floral Ornament">
     <h2>Wedding Ceremony</h2>
     <p>We joyfully invite you to the wedding of</p>
@@ -93,7 +93,7 @@
   </section>
 
   <!-- Section 2: Date -->
-  <section id="section2">
+  <section>
     <h2>Date & Time</h2>
     <div class="date">
       Wednesday, 19th Feb 2026<br>
@@ -102,7 +102,7 @@
   </section>
 
   <!-- Section 3: Venue -->
-  <section id="section3">
+  <section>
     <h2>Venue</h2>
     <div class="venue">
       <strong>Vivekanandapuram</strong><br>
@@ -113,29 +113,32 @@
   </section>
 
   <!-- Section 4: RSVP -->
-  <section id="section4">
+  <section>
     <h2>Confirm Your Attendance</h2>
     <a href="https://wa.me/YOUR_NUMBER" class="btn btn-rsvp">RSVP Now</a>
   </section>
 
   <script>
-    // Scroll-triggered animation
+    // Intersection Observer to show sections when scrolled
     const sections = document.querySelectorAll('section');
 
-    function checkSections() {
-      const triggerBottom = window.innerHeight / 1.2;
+    const observerOptions = {
+      threshold: 0.3 // Trigger when 30% of section visible
+    };
 
-      sections.forEach(section => {
-        const sectionTop = section.getBoundingClientRect().top;
-        if(sectionTop < triggerBottom) {
-          section.classList.add('visible');
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting) {
+          entry.target.classList.add('visible');
         }
       });
-    }
+    }, observerOptions);
 
-    window.addEventListener('scroll', checkSections);
+    sections.forEach(section => {
+      observer.observe(section);
+    });
 
-    // Optional: Initial confetti on first section
+    // Optional confetti for first section
     window.addEventListener('load', () => {
       confetti({
         particleCount: 100,
