@@ -6,7 +6,14 @@
 <title>Wedding Invitation | Franky & Reena</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body { height:100%; scroll-behavior: smooth; font-family: 'Georgia', serif; background:#fff; overflow-x:hidden; }
+html, body { 
+  height:100%; 
+  scroll-behavior: smooth; 
+  font-family: 'Georgia', serif; 
+  background:#fff; 
+  overflow-x:hidden; 
+  scroll-snap-type: y mandatory; 
+}
 body { position: relative; }
 
 canvas#heartsCanvas {
@@ -24,13 +31,20 @@ section {
   align-items: center;
   flex-direction: column;
   text-align: center;
-  padding: 0 20px;
+  padding: 0 10px;
   opacity:0;
   transform: translateY(50px);
-  transition: all 1s ease;
+  transition: transform 1s ease, opacity 1s ease;
   position: relative;
   background-size: cover;
   background-position: center;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 15px;
+  backdrop-filter: blur(10px) saturate(150%);
+  box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
+  margin:0;
+  scroll-snap-align: start;
+  overflow: hidden;
 }
 
 section.visible { opacity:1; transform: translateY(0); }
@@ -41,15 +55,16 @@ section::before {
   top:0; left:0; width:100%; height:100%;
   background-repeat: no-repeat;
   background-position: center;
-  background-size: contain;
-  opacity: 0.7;
+  background-size: cover;
+  opacity: 0.4;
   pointer-events: none;
   z-index:0;
+  transition: transform 1.5s ease; /* background zoom */
 }
 
-/* Updated paths to your repo images folder */
-#section1::before { background-image: url('e4d56a2618ad1278d69d4aee0d152c16.jpg'); }
-#section2::before { background-image: url('Blank-Watercolor-Background-Invitation-Template-edit-online.png'); }
+/* Background images */
+#section1::before { background-image: url('images/blue-hearts.png'); }
+#section2::before { background-image: url('images/green-floral.png'); }
 #section3::before { background-image: url('images/rings.png'); }
 #section4::before { background-image: url('images/floral.png'); }
 
@@ -118,16 +133,24 @@ h2 { font-size:2.5rem; color:#66CC99; }
 </section>
 
 <script>
-// Intersection Observer for fade-in
+// Fade + slide-in animation
 const sections=document.querySelectorAll('section');
-const observer=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.3});
+const observer=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+    } else {
+      e.target.classList.remove('visible');
+    }
+  });
+},{threshold:0.4});
 sections.forEach(s=>observer.observe(s));
 
 // Down arrow scroll
 document.querySelectorAll('.down-arrow').forEach((arrow,i)=>{
   arrow.addEventListener('click',()=>{
     if(i+1<sections.length){
-      sections[i+1].scrollIntoView({behavior:'smooth', block:'center'});
+      sections[i+1].scrollIntoView({behavior:'smooth', block:'start'});
     }
   });
 });
@@ -179,11 +202,20 @@ function animate(){
 }
 animate();
 
-// Scroll-reactive speed
+// Scroll-reactive speed + background zoom
 window.addEventListener('scroll',()=>{
   let st=window.pageYOffset || document.documentElement.scrollTop;
-  scrollSpeed = Math.min(Math.abs(st-lastScrollTop)/50 + 1, 5); // cap speed
+  scrollSpeed = Math.min(Math.abs(st-lastScrollTop)/50 + 1, 5);
   lastScrollTop=st<=0?0:st;
+
+  sections.forEach(section=>{
+    const rect = section.getBoundingClientRect();
+    const visiblePercent = 1 - Math.abs(rect.top / window.innerHeight);
+    section.querySelector('::before'); // not needed directly
+    section.style.setProperty('--zoom', 1 + 0.05*visiblePercent);
+    section.querySelector('::before');
+    section.style.backgroundSize = `${100 + 5*visiblePercent}% auto`;
+  });
 });
 </script>
 </body>
