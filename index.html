@@ -47,14 +47,15 @@ canvas#heartsCanvas {
 
 /* Sections (cards) */
 section {
-  width: calc(100% - 20px);          /* 10px left & right margin */
-  height: calc(100vh - 60px);        /* 30px top & bottom margin */
+  width: calc(100% - 20px);
+  max-width: 500px;
+  height: calc(100vh - 60px); /* 30px margin top & bottom */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-  padding: 20px;                     /* inner padding */
+  padding: 20px;
   opacity:0;
   transform: translateY(50px);
   transition: transform 1s ease, opacity 1s ease;
@@ -63,7 +64,7 @@ section {
   border-radius: 15px;
   backdrop-filter: blur(10px) saturate(150%);
   box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
-  margin: 30px 10px;                 /* 30px top & bottom, 10px left & right */
+  margin: 30px 10px; 
   scroll-snap-align: start;
   overflow: hidden;
   z-index: 1;
@@ -98,7 +99,7 @@ h2 { font-size:2.5rem; color:#66CC99; }
 /* Down arrow */
 .down-arrow {
   position: absolute;
-  bottom: 10px;               
+  bottom: 10px;
   left: 50%;
   transform: translateX(-50%);
   width:50px; 
@@ -121,7 +122,6 @@ h2 { font-size:2.5rem; color:#66CC99; }
 
 <canvas id="heartsCanvas"></canvas>
 
-<!-- Sliding Backgrounds -->
 <div class="background-wrapper">
   <div class="bg-slide"></div>
   <div class="bg-slide"></div>
@@ -156,37 +156,31 @@ h2 { font-size:2.5rem; color:#66CC99; }
 </section>
 
 <script>
-// Fade + slide-in animation
+// Fade in animation
 const sections=document.querySelectorAll('section');
 const observer=new IntersectionObserver(entries=>{
   entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.classList.add('visible');
-    } else {
-      e.target.classList.remove('visible');
-    }
+    if(e.isIntersecting) e.target.classList.add('visible');
   });
 },{threshold:0.4});
 sections.forEach(s=>observer.observe(s));
 
-// Down arrow scroll
+// Down arrow scroll (fix for mobile centering)
 document.querySelectorAll('.down-arrow').forEach((arrow,i)=>{
   arrow.addEventListener('click',()=>{
     if(i+1<sections.length){
       const nextSection = sections[i+1];
-      const offsetTop = nextSection.offsetTop;
-      window.scrollTo({ top: offsetTop, behavior: 'smooth' });
+      nextSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
 });
 
-// Sliding background sync with scroll
+// Sliding background
 const bgSlides = document.querySelectorAll('.bg-slide');
 window.addEventListener('scroll', ()=>{
-  let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   bgSlides.forEach((bg,i)=>{
-    // Move each background slightly slower for parallax effect
-    bg.style.transform = `translateY(${ -scrollTop * 0.2 * (i+1)}px)`;
+    bg.style.transform = `translateY(${-scrollTop*0.2*(i+1)}px)`;
   });
 });
 
@@ -237,7 +231,6 @@ function animate(){
 }
 animate();
 
-// Scroll-reactive speed
 window.addEventListener('scroll',()=>{
   let st=window.pageYOffset || document.documentElement.scrollTop;
   scrollSpeed = Math.min(Math.abs(st-lastScrollTop)/50 + 1, 5);
