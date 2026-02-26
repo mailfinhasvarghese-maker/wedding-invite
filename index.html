@@ -24,14 +24,14 @@ canvas#heartsCanvas {
 }
 
 section {
-  width: calc(100% - 20px); /* leave 10px padding on left & right */
-  height: calc(100vh - 20px); /* leave 10px padding on top & bottom */
+  width: calc(100% - 20px);          /* 10px left & right margin */
+  height: calc(100vh - 60px);        /* 30px top & bottom margin */
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
   text-align: center;
-  padding: 20px; /* inner padding for content */
+  padding: 20px;                     /* inner padding */
   opacity:0;
   transform: translateY(50px);
   transition: transform 1s ease, opacity 1s ease;
@@ -42,9 +42,10 @@ section {
   border-radius: 15px;
   backdrop-filter: blur(10px) saturate(150%);
   box-shadow: 0 8px 32px 0 rgba(0,0,0,0.2);
-  margin: 10px; /* outer spacing from screen edge */
+  margin: 30px 10px;                 /* 30px top & bottom, 10px left & right */
   scroll-snap-align: start;
   overflow: hidden;
+
 }
 
 section.visible { opacity:1; transform: translateY(0); }
