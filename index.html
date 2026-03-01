@@ -30,7 +30,7 @@ body{font-family:Poppins;background:#FFF6D9;color:#333;overflow-x:hidden;scroll-
 .fall-heart{position:fixed;font-size:20px;color:white;pointer-events:none;top:-50px;animation:fall linear infinite;z-index:3;}
 @keyframes fall{to{transform:translateY(120vh) rotate(360deg);}}
 
-/* Fullscreen images */
+/* Fullscreen Watercolor Images */
 .bg-image{
 position:absolute;
 top:0; left:0;
@@ -40,6 +40,16 @@ object-fit:cover;
 opacity:0.4;
 z-index:1;
 transition: transform 0.1s linear;
+
+/* Watercolor mask */
+-webkit-mask-image: url('https://i.ibb.co/8xFpcvV/watercolor-mask.png'); /* placeholder splatter mask */
+-webkit-mask-repeat: no-repeat;
+-webkit-mask-size: cover;
+-webkit-mask-position: center;
+mask-image: url('https://i.ibb.co/8xFpcvV/watercolor-mask.png');
+mask-repeat: no-repeat;
+mask-size: cover;
+mask-position: center;
 }
 
 /* Clouds */
