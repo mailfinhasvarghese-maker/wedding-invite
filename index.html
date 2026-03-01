@@ -3,204 +3,858 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Franky & Reena Wedding</title>
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Poppins:wght@300;400&display=swap" rel="stylesheet">
+<title>Finhas & Anjitha — April 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Great+Vibes&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Poppins;background:#FFF6D9;color:#333;overflow-x:hidden;scroll-behavior:smooth;position:relative;}
-
-/* Intro Heart */
-#intro{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  position:relative;
-  z-index:9999; /* top layer */
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --gold: #c9a96e;
+  --rose: #b85a6a;
+  --ivory: #faf5ee;
+  --dark: #100c0b;
 }
-.heart{
-  font-size:110px;
-  cursor:pointer;
-  animation:pulse 2s infinite;
-  color:#C41E3A;
-  text-shadow:0 15px 25px rgba(0,0,0,0.15);
-  position:relative;
-  z-index:10000;
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Cormorant Garamond', serif;
+  background: var(--dark);
+  color: var(--ivory);
+  overflow-x: hidden;
 }
-.tap{margin-top:20px;font-size:18px;opacity:.7;}
-@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.25);}100%{transform:scale(1);}}
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-track { background: var(--dark); }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
 
-/* Main Sections */
-#main{display:none;background:white;position:relative;}
+/* ==============================
+   INTRO
+   ============================== */
+#intro {
+  position: fixed; inset: 0; z-index: 9999;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  background: radial-gradient(ellipse at 45% 40%, #231412 0%, #080504 100%);
+  overflow: hidden;
+  transition: opacity 1.8s cubic-bezier(0.4,0,0.2,1);
+}
+#intro.hide { opacity: 0; pointer-events: none; }
 
-.section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;position:relative;overflow:hidden;}
-.title{font-family:Great Vibes;font-size:55px;color:#C41E3A;margin-bottom:25px;}
-.box{background:rgba(255,255,255,0.95);padding:20px 30px;margin:10px;border-radius:15px;box-shadow:0 10px 25px rgba(0,0,0,0.1);max-width:350px;position:relative;z-index:3;}
+.i-cloud {
+  position: absolute; border-radius: 50%;
+  filter: blur(80px); pointer-events: none;
+  animation: iDrift ease-in-out infinite;
+}
+.ic1{width:700px;height:260px;background:rgba(201,169,110,0.06);top:0%;left:-15%;animation-duration:22s;}
+.ic2{width:550px;height:220px;background:rgba(184,90,106,0.05);top:60%;left:35%;animation-duration:28s;animation-delay:-9s;}
+.ic3{width:800px;height:300px;background:rgba(255,252,248,0.04);top:25%;right:-18%;animation-duration:19s;animation-delay:-5s;}
+.ic4{width:450px;height:180px;background:rgba(201,169,110,0.04);bottom:5%;left:8%;animation-duration:24s;animation-delay:-14s;}
+@keyframes iDrift{0%,100%{transform:translate(0,0);}33%{transform:translate(35px,-22px);}66%{transform:translate(-22px,14px);}}
 
-/* Scroll arrow */
-.arrow{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:32px;animation:bounce 2s infinite;cursor:pointer;z-index:5;}
-@keyframes bounce{0%{transform:translate(-50%,0)}50%{transform:translate(-50%,12px)}100%{transform:translate(-50%,0)}}
-
-/* Background full-screen images */
-.bg-image{
-position:absolute;
-top:0; left:0;
-width:100%;
-height:100%;
-object-fit:cover;
-opacity:0.4;
-z-index:0;
-transition: transform 0.1s linear;
-filter: brightness(0.9) contrast(1.1) saturate(1.2);
+.intro-content {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
 }
 
-/* Particles container */
-.particles{
-position:absolute;
-top:0; left:0;
-width:100%; height:100%;
-pointer-events:none;
-z-index:1;
-overflow:hidden;
+/* ---- Couple Photo ---- */
+.couple-photo-wrap {
+  position: relative; margin-bottom: 16px;
+  opacity: 0; animation: fadeUp 1.2s 0s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+.couple-photo-ring {
+  width: 130px; height: 130px; border-radius: 50%;
+  border: 2px solid rgba(201,169,110,0.5);
+  padding: 4px;
+  background: radial-gradient(circle, rgba(201,169,110,0.12) 0%, transparent 70%);
+  position: relative;
+  box-shadow: 0 0 40px rgba(201,169,110,0.18), 0 0 80px rgba(201,169,110,0.08);
+  animation: photoGlow 4s ease-in-out infinite;
+}
+.couple-photo-ring::before {
+  content:''; position:absolute; inset:-10px; border-radius:50%;
+  border:1px solid rgba(201,169,110,0.18);
+  animation: ringPulse 3.5s ease-in-out infinite;
+}
+.couple-photo-ring::after {
+  content:''; position:absolute; inset:-22px; border-radius:50%;
+  border:1px solid rgba(201,169,110,0.07);
+  animation: ringPulse 3.5s ease-in-out infinite 0.8s;
+}
+.couple-photo {
+  width: 100%; height: 100%; border-radius: 50%;
+  object-fit: cover; display: block;
+  filter: brightness(0.95) saturate(1.1);
+}
+/* Small petal ornaments around the photo */
+.petal {
+  position: absolute; font-size: 13px;
+  animation: petalOrbit linear infinite;
+  pointer-events: none;
+}
+.petal:nth-child(1){top:-8px;left:50%;transform:translateX(-50%);animation-duration:8s;}
+.petal:nth-child(2){top:50%;right:-8px;transform:translateY(-50%);animation-duration:10s;animation-delay:-2s;}
+.petal:nth-child(3){bottom:-8px;left:50%;transform:translateX(-50%);animation-duration:9s;animation-delay:-4s;}
+.petal:nth-child(4){top:50%;left:-8px;transform:translateY(-50%);animation-duration:11s;animation-delay:-6s;}
+@keyframes petalOrbit{0%,100%{opacity:0.6;transform:scale(1);}50%{opacity:1;transform:scale(1.3);}}
+@keyframes photoGlow{0%,100%{box-shadow:0 0 40px rgba(201,169,110,0.18),0 0 80px rgba(201,169,110,0.08);}50%{box-shadow:0 0 60px rgba(201,169,110,0.3),0 0 100px rgba(201,169,110,0.14);}}
+
+.intro-eyebrow {
+  font-size: 11px; letter-spacing: 7px; text-transform: uppercase;
+  color: rgba(250,245,238,0.38);
+  opacity: 0; animation: fadeUp 1s 0.3s ease forwards;
+}
+.intro-script {
+  font-family: 'Great Vibes', cursive;
+  font-size: clamp(44px, 8vw, 72px);
+  color: var(--gold);
+  text-shadow: 0 0 80px rgba(201,169,110,0.35);
+  opacity: 0; animation: fadeUp 1.4s 0.6s cubic-bezier(0.16,1,0.3,1) forwards;
+  letter-spacing: 3px;
+}
+.heart-wrap {
+  margin-top: 28px; cursor: pointer;
+  opacity: 0; animation: fadeUp 1s 1.4s ease forwards;
+}
+.heart-ring {
+  width: 96px; height: 96px; border-radius: 50%;
+  border: 1px solid rgba(201,169,110,0.28);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; transition: transform 0.35s ease;
+  animation: ringPulse 3s ease-in-out infinite;
+}
+.heart-ring::before {
+  content:''; position:absolute; inset:-13px; border-radius:50%;
+  border:1px solid rgba(201,169,110,0.11);
+  animation: ringPulse 3s ease-in-out infinite 0.6s;
+}
+.heart-ring::after {
+  content:''; position:absolute; inset:-26px; border-radius:50%;
+  border:1px solid rgba(201,169,110,0.05);
+  animation: ringPulse 3s ease-in-out infinite 1.2s;
+}
+.heart-wrap:hover .heart-ring { transform: scale(1.1); }
+@keyframes ringPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.07);opacity:0.55;}}
+
+.heart-icon {
+  font-size: 42px; display: block;
+  animation: heartbeat 2.6s ease-in-out infinite;
+  transition: transform 0.1s ease;
+}
+.heart-icon.pop { animation: heartPop 0.35s ease forwards; }
+@keyframes heartbeat{0%,100%{transform:scale(1);}15%{transform:scale(1.22);}30%{transform:scale(1);}45%{transform:scale(1.1);}60%{transform:scale(1);}}
+@keyframes heartPop{0%{transform:scale(1);}30%{transform:scale(1.5);}70%{transform:scale(0.88);}100%{transform:scale(1);}}
+
+.tap-label {
+  margin-top: 18px; font-size: 10px; letter-spacing: 5px; text-transform: uppercase;
+  color: rgba(250,245,238,0.3);
+  opacity: 0; animation: fadeUp 0.8s 2.1s ease forwards, tapBlink 2s 2.9s ease-in-out infinite;
+}
+@keyframes tapBlink{0%,100%{opacity:0.3;}50%{opacity:0.65;}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
+
+/* Music hint */
+.music-hint {
+  margin-top: 10px; font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(201,169,110,0.45);
+  opacity: 0; animation: fadeUp 0.8s 2.5s ease forwards;
 }
 
-/* Falling hearts */
-.particles .fall-heart{
-position:absolute;
-pointer-events:none;
-top:-50px;
-animation:fall linear infinite;
+/* ==============================
+   MUSIC TOGGLE
+   ============================== */
+.music-btn {
+  position: fixed; top: 18px; right: 18px; z-index: 9000;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: rgba(201,169,110,0.12);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,169,110,0.3);
+  display: none; align-items: center; justify-content: center;
+  cursor: pointer; font-size: 16px;
+  transition: background 0.3s, transform 0.2s;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+.music-btn:hover { background: rgba(201,169,110,0.22); transform: scale(1.1); }
+.music-btn.active { background: rgba(201,169,110,0.2); }
+.music-btn .bar {
+  display: flex; gap: 2px; align-items: flex-end; height: 16px;
+}
+.music-btn .bar span {
+  width: 3px; background: var(--gold); border-radius: 2px;
+  animation: barDance 0.8s ease-in-out infinite;
+}
+.music-btn .bar span:nth-child(1){height:8px;animation-delay:0s;}
+.music-btn .bar span:nth-child(2){height:14px;animation-delay:0.15s;}
+.music-btn .bar span:nth-child(3){height:10px;animation-delay:0.3s;}
+.music-btn .bar span:nth-child(4){height:6px;animation-delay:0.45s;}
+.music-btn.paused .bar span { animation-play-state: paused; }
+@keyframes barDance{0%,100%{transform:scaleY(0.5);}50%{transform:scaleY(1);}}
+
+/* ==============================
+   MAIN
+   ============================== */
+#main { display: none; }
+
+/* Nav dots */
+.nav-dots {
+  position: fixed; right: 18px; top: 50%;
+  transform: translateY(-50%); z-index: 8888;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.nav-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: rgba(255,252,248,0.22); cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+.nav-dot.active {
+  background: var(--gold); height: 20px; border-radius: 3px;
+  box-shadow: 0 0 10px rgba(201,169,110,0.5);
 }
 
-/* SVG Clouds Container */
-.clouds-container{
-  position:absolute;
-  top:0; left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:0; /* behind content */
-  overflow:hidden;
+/* Sections */
+.section {
+  min-height: 100vh; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
 }
-.cloud{
-  position:absolute;
-  opacity:0.15;
-  will-change: transform;
-  transition: transform 0.1s linear;
+.bg-img {
+  position: absolute; inset: 0;
+  width: 100%; height: 115%; top: -7%;
+  object-fit: cover; z-index: 0; will-change: transform;
+}
+.overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(165deg,rgba(8,4,3,0.8) 0%,rgba(8,4,3,0.38) 50%,rgba(8,4,3,0.82) 100%);
 }
 
-/* Initial positions */
-.cloud1{left:-200px; top:50px;}
-.cloud2{left:-300px; top:150px;}
-.cloud3{left:-250px; top:250px;}
+/* FOG SYSTEM */
+.fog-veil{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse 130% 70% at 50% 50%,rgba(255,252,248,0.03) 0%,rgba(255,252,248,0.14) 100%);}
+.clouds-wrap{position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+.c{position:absolute;border-radius:50%;filter:blur(55px);will-change:transform;background:radial-gradient(circle,rgba(255,252,248,0.52) 0%,rgba(255,252,248,0) 70%);}
+.c1{width:900px;height:320px;top:0%;left:-20%;animation:d1 24s ease-in-out infinite;}
+.c2{width:600px;height:220px;top:20%;left:40%;animation:d2 20s ease-in-out infinite;opacity:.6;}
+.c3{width:750px;height:270px;top:50%;left:-5%;animation:d3 28s ease-in-out infinite;}
+.c4{width:550px;height:200px;top:65%;right:-8%;animation:d4 22s ease-in-out infinite;opacity:.7;}
+.c5{width:450px;height:170px;top:38%;right:10%;animation:d5 18s ease-in-out infinite;opacity:.45;}
+.c6{width:1000px;height:350px;bottom:-8%;left:-15%;animation:d6 32s ease-in-out infinite;opacity:.8;}
+@keyframes d1{0%,100%{transform:translate(0,0);}33%{transform:translate(50px,-25px);}66%{transform:translate(-25px,12px);}}
+@keyframes d2{0%,100%{transform:translate(0,0);}40%{transform:translate(-60px,18px);}70%{transform:translate(30px,-12px);}}
+@keyframes d3{0%,100%{transform:translate(0,0);}50%{transform:translate(70px,-30px);}}
+@keyframes d4{0%,100%{transform:translate(0,0);}30%{transform:translate(-50px,25px);}70%{transform:translate(20px,-10px);}}
+@keyframes d5{0%,100%{transform:translate(0,0);}45%{transform:translate(40px,20px);}}
+@keyframes d6{0%,100%{transform:translate(0,0);}35%{transform:translate(-35px,-18px);}65%{transform:translate(55px,8px);}}
+
+.mist-bot{position:absolute;bottom:0;left:0;width:100%;height:48%;z-index:3;pointer-events:none;background:linear-gradient(to top,rgba(255,252,248,0.76) 0%,rgba(255,252,248,0.38) 28%,rgba(255,252,248,0.1) 56%,transparent 100%);animation:mistB 9s ease-in-out infinite;}
+@keyframes mistB{0%,100%{opacity:1;}50%{opacity:.7;}}
+.heaven{position:absolute;top:0;left:0;width:100%;height:40%;z-index:3;pointer-events:none;background:linear-gradient(to bottom,rgba(255,252,248,0.72) 0%,rgba(255,252,248,0.28) 42%,transparent 100%);}
+.wisps{position:absolute;inset:0;z-index:3;pointer-events:none;overflow:hidden;}
+.wisp{position:absolute;left:-20%;width:140%;border-radius:50%;filter:blur(30px);background:rgba(255,252,248,0.18);animation:wispS ease-in-out infinite;}
+.wisp:nth-child(1){height:55px;top:18%;animation-duration:33s;opacity:.5;}
+.wisp:nth-child(2){height:38px;top:34%;animation-duration:41s;opacity:.34;animation-delay:-14s;}
+.wisp:nth-child(3){height:50px;top:53%;animation-duration:27s;opacity:.42;animation-delay:-7s;}
+.wisp:nth-child(4){height:42px;top:73%;animation-duration:37s;opacity:.32;animation-delay:-21s;}
+@keyframes wispS{0%{transform:translateX(-6%) skewX(-2deg);}50%{transform:translateX(6%) skewX(2deg);}100%{transform:translateX(-6%) skewX(-2deg);}}
+.sparkles{position:absolute;inset:0;z-index:4;pointer-events:none;}
+.sparkle{position:absolute;border-radius:50%;background:rgba(255,252,248,0.85);pointer-events:none;animation:sparkF ease-in-out infinite;}
+@keyframes sparkF{0%{opacity:0;transform:translateY(0) scale(.4);}30%{opacity:.9;}70%{opacity:.5;}100%{opacity:0;transform:translateY(-90px) scale(1.5);}}
+.particles{position:absolute;inset:0;z-index:4;pointer-events:none;}
+.fall-heart{position:absolute;pointer-events:none;animation:fallH linear infinite;}
+@keyframes fallH{0%{transform:translateY(-30px) rotate(0deg);opacity:0;}10%{opacity:.75;}90%{opacity:.35;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+
+/* SCROLL REVEAL */
+.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-blur{
+  transition-property:opacity,transform,filter;
+  transition-timing-function:cubic-bezier(0.16,1,0.3,1);
+  transition-duration:1s;
+}
+.reveal{opacity:0;transform:translateY(38px);}
+.reveal-left{opacity:0;transform:translateX(-48px);}
+.reveal-right{opacity:0;transform:translateX(48px);}
+.reveal-scale{opacity:0;transform:scale(0.82);}
+.reveal-blur{opacity:0;filter:blur(12px);transform:translateY(16px);}
+.reveal.v,.reveal-left.v,.reveal-right.v,.reveal-scale.v,.reveal-blur.v{opacity:1;transform:none;filter:none;}
+.d1{transition-delay:0s;}.d2{transition-delay:.14s;}.d3{transition-delay:.28s;}
+.d4{transition-delay:.42s;}.d5{transition-delay:.56s;}.d6{transition-delay:.70s;}.d7{transition-delay:.84s;}
+
+/* CONTENT */
+.content{
+  position:relative;z-index:6;
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:80px 24px;width:100%;max-width:700px;
+}
+.eyebrow{font-size:11px;letter-spacing:6px;text-transform:uppercase;color:var(--gold);opacity:.82;margin-bottom:12px;}
+.script-big{font-family:'Great Vibes',cursive;font-size:clamp(56px,9vw,96px);color:#fff;line-height:1.05;text-shadow:0 4px 50px rgba(0,0,0,0.55),0 0 100px rgba(255,252,248,0.1);letter-spacing:2px;}
+.serif-sub{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(17px,2.8vw,26px);color:rgba(255,252,248,0.6);font-weight:400;margin-bottom:8px;}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,48px);font-weight:400;color:#fff;letter-spacing:2px;text-shadow:0 2px 24px rgba(0,0,0,0.5);}
+.divider{display:flex;align-items:center;gap:14px;margin:16px 0;width:100%;max-width:300px;}
+.div-line{flex:1;height:1px;background:linear-gradient(to right,transparent,var(--gold),transparent);}
+.div-gem{font-size:10px;color:var(--gold);letter-spacing:4px;}
+
+/* Glass pill */
+.pill{
+  background:rgba(255,252,248,0.07);
+  backdrop-filter:blur(22px) saturate(1.4);
+  -webkit-backdrop-filter:blur(22px);
+  border:1px solid rgba(255,252,248,0.12);
+  border-radius:100px;padding:15px 38px;
+  font-size:clamp(14px,2.2vw,17px);font-weight:300;
+  color:rgba(255,252,248,0.88);line-height:1.75;letter-spacing:.5px;
+  box-shadow:0 8px 34px rgba(0,0,0,0.28),inset 0 1px 0 rgba(255,255,255,0.07);
+  transition:transform 0.3s ease,box-shadow 0.3s ease;
+  margin-top:18px;
+}
+.pill:hover{transform:translateY(-3px);box-shadow:0 16px 44px rgba(0,0,0,0.38),inset 0 1px 0 rgba(255,255,255,0.1);}
+
+/* Detail cards */
+.dcard{
+  background:rgba(255,252,248,0.06);backdrop-filter:blur(26px);-webkit-backdrop-filter:blur(26px);
+  border:1px solid rgba(201,169,110,0.2);border-radius:22px;padding:28px 36px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.35),inset 0 1px 0 rgba(255,255,255,0.05);
+  transition:transform 0.3s ease;min-width:150px;
+}
+.dcard:hover{transform:translateY(-4px);}
+.dcard .lbl{font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);opacity:.78;margin-bottom:10px;}
+.dcard .val{font-family:'Playfair Display',serif;font-size:clamp(20px,3.5vw,32px);color:#fff;line-height:1.2;font-weight:400;}
+.dcard .hint{margin-top:6px;font-size:13px;color:rgba(255,252,248,0.42);font-style:italic;}
+.cards-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:26px;width:100%;}
+
+/* Date ring */
+.date-ring{
+  width:186px;height:186px;border-radius:50%;
+  border:1px solid rgba(201,169,110,0.28);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  position:relative;background:rgba(255,252,248,0.04);backdrop-filter:blur(18px);
+  margin:20px auto;box-shadow:0 0 60px rgba(201,169,110,0.08);
+  transition:transform 0.4s ease,box-shadow 0.4s ease;
+}
+.date-ring::before{content:'';position:absolute;inset:-13px;border-radius:50%;border:1px solid rgba(201,169,110,0.11);}
+.date-ring::after{content:'';position:absolute;inset:-26px;border-radius:50%;border:1px solid rgba(201,169,110,0.05);}
+.date-ring:hover{transform:scale(1.04);box-shadow:0 0 80px rgba(201,169,110,0.16);}
+.dr-month{font-size:11px;letter-spacing:5px;text-transform:uppercase;color:var(--gold);margin-bottom:6px;opacity:.85;}
+.dr-day{font-family:'Playfair Display',serif;font-size:54px;font-weight:700;color:#fff;line-height:1;}
+.dr-year{font-size:12px;letter-spacing:4px;color:rgba(255,252,248,0.44);margin-top:6px;}
+
+/* Monogram */
+.monogram{
+  width:96px;height:96px;border-radius:50%;
+  border:1px solid rgba(201,169,110,0.32);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Great Vibes',cursive;font-size:34px;color:var(--gold);
+  background:rgba(201,169,110,0.05);backdrop-filter:blur(12px);
+  margin-bottom:4px;position:relative;box-shadow:0 0 40px rgba(201,169,110,0.1);
+}
+.monogram::before{content:'';position:absolute;inset:-10px;border-radius:50%;border:1px solid rgba(201,169,110,0.12);}
+
+/* Quote */
+.quote{
+  font-style:italic;font-size:clamp(16px,2.5vw,22px);
+  color:rgba(255,252,248,0.62);line-height:1.85;max-width:440px;
+  position:relative;padding:0 30px;margin-top:4px;
+}
+.quote::before,.quote::after{
+  font-family:'Great Vibes',cursive;font-style:normal;font-size:60px;
+  color:var(--gold);opacity:0.22;line-height:0;position:absolute;
+}
+.quote::before{content:'\201C';top:14px;left:0;}
+.quote::after{content:'\201D';bottom:-18px;right:0;}
+
+/* Badge */
+.badge{
+  display:inline-flex;align-items:center;justify-content:center;
+  border:1px solid rgba(201,169,110,0.4);border-radius:100px;
+  padding:9px 28px;font-size:11px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);background:rgba(201,169,110,0.06);backdrop-filter:blur(12px);
+  margin-top:6px;
+}
+
+/* ==============================
+   MAP BUTTON
+   ============================== */
+.map-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  margin-top: 20px;
+  background: linear-gradient(135deg, rgba(201,169,110,0.18) 0%, rgba(201,169,110,0.08) 100%);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(201,169,110,0.38);
+  border-radius: 100px; padding: 14px 34px;
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase;
+  color: var(--gold); text-decoration: none;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 20px rgba(201,169,110,0.06);
+  transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
+  cursor: pointer;
+}
+.map-btn:hover {
+  background: linear-gradient(135deg, rgba(201,169,110,0.32) 0%, rgba(201,169,110,0.18) 100%);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.4), 0 0 30px rgba(201,169,110,0.12);
+  transform: translateY(-3px);
+  color: #e8c98a;
+}
+.map-btn:active { transform: translateY(0); }
+.map-btn svg { flex-shrink: 0; }
+.map-btn .pin-pulse {
+  position: relative; display: flex; align-items: center; justify-content: center;
+}
+.map-btn .pin-pulse::before {
+  content:''; position:absolute;
+  width:24px; height:24px; border-radius:50%;
+  background:rgba(201,169,110,0.2);
+  animation: pinRipple 1.8s ease-out infinite;
+}
+@keyframes pinRipple{0%{transform:scale(0.8);opacity:0.8;}100%{transform:scale(1.8);opacity:0;}}
+
+/* ==============================
+   SCROLL ARROW
+   ============================== */
+.arrow{
+  position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+  z-index:8888;cursor:pointer;
+  display:flex;flex-direction:column;align-items:center;gap:5px;
+  opacity:0.6;transition:opacity 0.4s ease;
+}
+.arrow:hover{opacity:1;}
+.adot{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:adrop 1.7s ease-in-out infinite;}
+.adot:nth-child(2){animation-delay:.22s;}.adot:nth-child(3){animation-delay:.44s;}
+@keyframes adrop{0%,100%{opacity:.2;transform:translateY(-5px);}50%{opacity:1;transform:translateY(5px);}}
+
+/* Click ripple overlay */
+.ripple-ring {
+  position: fixed; pointer-events: none; z-index: 99999;
+  border-radius: 50%;
+  border: 2px solid rgba(201,169,110,0.7);
+  transform: scale(0); opacity: 1;
+  animation: rippleOut 0.7s cubic-bezier(0.16,1,0.3,1) forwards;
+}
+@keyframes rippleOut{0%{transform:scale(0);opacity:1;}100%{transform:scale(4);opacity:0;}}
 </style>
 </head>
 <body>
 
-<!-- Clouds Container with SVGs -->
-<div class="clouds-container">
-  <svg class="cloud cloud1" viewBox="0 0 64 64" width="150" height="90">
-    <path fill="white" d="M20 50c-7 0-12-5-12-12 0-6 5-11 12-11 2-7 8-12 15-12 7 0 13 5 15 12 6 0 11 5 11 11s-5 12-11 12H20z"/>
-  </svg>
-  <svg class="cloud cloud2" viewBox="0 0 64 64" width="200" height="120">
-    <path fill="white" d="M24 54c-8 0-14-6-14-14s6-14 14-14c3-8 11-14 20-14 8 0 15 6 18 14 7 0 12 6 12 12s-5 14-12 14H24z"/>
-  </svg>
-  <svg class="cloud cloud3" viewBox="0 0 64 64" width="180" height="100">
-    <path fill="white" d="M18 48c-6 0-10-5-10-11 0-5 4-10 10-10 2-6 7-10 13-10s11 4 13 10c5 0 9 5 9 10s-4 11-9 11H18z"/>
-  </svg>
-</div>
-
-<!-- Intro -->
+<!-- INTRO -->
 <div id="intro">
-<div class="heart" onclick="openInvite()">❤️</div>
-<div class="tap">Tap the Heart</div>
+  <div class="i-cloud ic1"></div>
+  <div class="i-cloud ic2"></div>
+  <div class="i-cloud ic3"></div>
+  <div class="i-cloud ic4"></div>
+
+  <div class="intro-content">
+    <!-- Couple Photo -->
+    <div class="couple-photo-wrap">
+      <div class="couple-photo-ring">
+        <img class="couple-photo"
+          src="https://picsum.photos/seed/couple2026/300/300"
+          alt="Finhas & Anjitha">
+        <span class="petal">🌸</span>
+        <span class="petal">✨</span>
+        <span class="petal">🌸</span>
+        <span class="petal">✨</span>
+      </div>
+    </div>
+
+    <div class="intro-eyebrow">You are warmly invited</div>
+    <div class="intro-script">Finhas & Anjitha</div>
+
+    <div class="heart-wrap" id="heartWrap" onclick="openInvite(event)">
+      <div class="heart-ring">
+        <span class="heart-icon" id="heartIcon">❤️</span>
+      </div>
+    </div>
+    <div class="tap-label">Touch to open</div>
+    <div class="music-hint">♪ Music will play</div>
+  </div>
 </div>
 
-<!-- Main Sections -->
+<!-- Music toggle -->
+<button class="music-btn" id="musicBtn" onclick="toggleMusic()" title="Toggle music">
+  <div class="bar">
+    <span></span><span></span><span></span><span></span>
+  </div>
+</button>
+
+<!-- MAIN -->
 <div id="main">
 
-<section class="section">
-<img class="bg-image" src="https://picsum.photos/1920/1080?1" alt="Couple Image 1">
-<div class="particles"></div>
-<div class="title">Franky & Reena</div>
-<div class="box">Together with our families<br>We invite you to celebrate our wedding</div>
-<div class="box">With love and blessings<br>Join our special day</div>
-</section>
+  <nav class="nav-dots" id="navDots">
+    <div class="nav-dot" onclick="goTo(0)"></div>
+    <div class="nav-dot" onclick="goTo(1)"></div>
+    <div class="nav-dot" onclick="goTo(2)"></div>
+  </nav>
 
-<section class="section">
-<img class="bg-image" src="https://picsum.photos/1920/1080?2" alt="Wedding Day">
-<div class="particles"></div>
-<div class="title">Wedding Day</div>
-<div class="box">Saturday<br>December 12 2026</div>
-<div class="box">Time<br>4:30 PM</div>
-</section>
+  <!-- S1: COVER HERO -->
+  <section class="section" id="s0">
+    <img class="bg-img" src="https://picsum.photos/seed/wA2026/1920/1080" alt="">
+    <div class="overlay"></div>
+    <div class="fog-veil"></div>
+    <div class="clouds-wrap">
+      <div class="c c1"></div><div class="c c2"></div><div class="c c3"></div>
+      <div class="c c4"></div><div class="c c5"></div><div class="c c6"></div>
+    </div>
+    <div class="wisps"><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div></div>
+    <div class="mist-bot"></div>
+    <div class="heaven"></div>
+    <div class="sparkles"></div>
+    <div class="particles"></div>
+    <div class="content">
+      <div class="eyebrow reveal d1">April 19 · 2026 · Dubai</div>
+      <div class="script-big reveal d2">Finhas</div>
+      <div class="serif-sub reveal d3">and the love of his life</div>
+      <div class="script-big reveal d4">Anjitha</div>
+      <div class="divider reveal d5">
+        <div class="div-line"></div><div class="div-gem">✦ ✦ ✦</div><div class="div-line"></div>
+      </div>
+      <div class="pill reveal-blur d6">
+        Together with our families, we joyfully invite you<br>
+        to witness and celebrate our sacred union
+      </div>
+    </div>
+  </section>
 
-<section class="section">
-<img class="bg-image" src="https://picsum.photos/1920/1080?3" alt="Venue">
-<div class="particles"></div>
-<div class="title">Venue</div>
-<div class="box">St Mary's Church</div>
-<div class="box">Dubai UAE</div>
-</section>
+  <!-- S2: DATE & TIME -->
+  <section class="section" id="s1">
+    <img class="bg-img" src="https://picsum.photos/seed/wB2026/1920/1080" alt="">
+    <div class="overlay"></div>
+    <div class="fog-veil"></div>
+    <div class="clouds-wrap">
+      <div class="c c1"></div><div class="c c2"></div><div class="c c3"></div>
+      <div class="c c4"></div><div class="c c5"></div><div class="c c6"></div>
+    </div>
+    <div class="wisps"><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div></div>
+    <div class="mist-bot"></div>
+    <div class="heaven"></div>
+    <div class="sparkles"></div>
+    <div class="particles"></div>
+    <div class="content">
+      <div class="eyebrow reveal d1">Mark Your Calendar</div>
+      <div class="section-title reveal d2">The Wedding Ceremony</div>
+      <div class="divider reveal d3">
+        <div class="div-line"></div><div class="div-gem">✦</div><div class="div-line"></div>
+      </div>
+      <div class="date-ring reveal-scale d4">
+        <div class="dr-month">April</div>
+        <div class="dr-day">19</div>
+        <div class="dr-year">2026</div>
+      </div>
+      <div class="cards-row">
+        <div class="dcard reveal-left d5">
+          <div class="lbl">Day</div>
+          <div class="val">Sunday</div>
+          <div class="hint">A day to remember</div>
+        </div>
+        <div class="dcard reveal-right d5">
+          <div class="lbl">Time</div>
+          <div class="val">12:00 PM</div>
+          <div class="hint">Doors open at 11:30</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-<section class="section">
-<img class="bg-image" src="https://picsum.photos/1920/1080?4" alt="RSVP">
-<div class="particles"></div>
-<div class="title">RSVP</div>
-<div class="box">Franky +971521234567</div>
-<div class="box">Reena +971521234568</div>
-</section>
+  <!-- S3: VENUE & CLOSING -->
+  <section class="section" id="s2">
+    <img class="bg-img" src="https://picsum.photos/seed/wC2026/1920/1080" alt="">
+    <div class="overlay"></div>
+    <div class="fog-veil"></div>
+    <div class="clouds-wrap">
+      <div class="c c1"></div><div class="c c2"></div><div class="c c3"></div>
+      <div class="c c4"></div><div class="c c5"></div><div class="c c6"></div>
+    </div>
+    <div class="wisps"><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div><div class="wisp"></div></div>
+    <div class="mist-bot"></div>
+    <div class="heaven"></div>
+    <div class="sparkles"></div>
+    <div class="particles"></div>
+    <div class="content" style="gap:0;">
+      <div class="monogram reveal-scale d1">F&A</div>
+      <div class="eyebrow reveal d2" style="margin-top:14px;">Join us at</div>
+      <div class="section-title reveal d3">St Mary's Church</div>
+      <div class="eyebrow reveal d4" style="color:rgba(255,252,248,0.4);font-size:12px;letter-spacing:3px;margin-top:6px;">Dubai, United Arab Emirates</div>
+
+      <!-- MAP BUTTON -->
+      <a class="map-btn reveal-scale d5"
+         href="https://maps.google.com/?q=St+Mary's+Catholic+Church+Dubai"
+         target="_blank" rel="noopener">
+        <span class="pin-pulse">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0118 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </span>
+        Locate the Venue
+      </a>
+
+      <div class="divider reveal d6" style="margin:22px auto;">
+        <div class="div-line"></div><div class="div-gem">✦ ✦ ✦</div><div class="div-line"></div>
+      </div>
+      <div class="quote reveal-blur d6">
+        Two souls, one heart.<br>
+        A love written in the stars,<br>
+        celebrated among the ones we cherish most.
+      </div>
+      <div class="badge reveal d7" style="margin-top:26px;">With All Our Love · Finhas &amp; Anjitha</div>
+    </div>
+  </section>
 
 </div>
 
-<div class="arrow" onclick="scrollDown()">⬇</div>
+<!-- Scroll arrow -->
+<div class="arrow" id="arrow" onclick="scrollDown()">
+  <div class="adot"></div><div class="adot"></div><div class="adot"></div>
+</div>
 
+<!-- AUDIO: gentle piano/harp wedding melody via Web Audio API (no external file needed) -->
 <script>
-// Show main content after heart click
-function openInvite(){
-  document.getElementById("intro").style.display="none";
-  document.getElementById("main").style.display="block";
+/* ============================
+   WEB AUDIO — generative wedding music
+   (pentatonic harp arpeggio, no external file)
+   ============================ */
+let audioCtx = null;
+let musicInterval = null;
+let musicPlaying = false;
+
+const notes = [261.63,293.66,329.63,392.00,440.00,523.25,587.33,659.25,783.99,880.00]; // C pentatonic
+const arpeggioPattern = [0,2,4,7,9,7,4,2, 1,3,5,8,9,8,5,3]; // indexes
+
+function initAudio(){
+  if(!audioCtx) audioCtx = new (window.AudioContext||window.webkitAudioContext)();
+}
+
+function playHarpNote(freq, startTime, duration=0.9, vol=0.06){
+  if(!audioCtx) return;
+  const osc  = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  // Slight detune for warmth
+  const osc2 = audioCtx.createOscillator();
+  const gain2= audioCtx.createGain();
+
+  osc.type  = 'triangle';
+  osc.frequency.setValueAtTime(freq, startTime);
+  osc.detune.setValueAtTime(3, startTime);
+
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(freq*2, startTime);
+
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+  gain2.gain.setValueAtTime(0, startTime);
+  gain2.gain.linearRampToValueAtTime(vol*0.3, startTime + 0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.0001, startTime + duration * 0.5);
+
+  // Reverb-like: add delayed echo
+  const delay = audioCtx.createDelay(2);
+  delay.delayTime.setValueAtTime(0.35, startTime);
+  const feedGain = audioCtx.createGain();
+  feedGain.gain.setValueAtTime(0.22, startTime);
+
+  osc.connect(gain);
+  osc2.connect(gain2);
+  gain.connect(audioCtx.destination);
+  gain2.connect(audioCtx.destination);
+  gain.connect(delay);
+  delay.connect(feedGain);
+  feedGain.connect(delay);
+  feedGain.connect(audioCtx.destination);
+
+  osc.start(startTime);  osc.stop(startTime + duration + 0.5);
+  osc2.start(startTime); osc2.stop(startTime + duration * 0.5);
+}
+
+function playBass(freq, startTime){
+  if(!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const gain= audioCtx.createGain();
+  osc.type='sine';
+  osc.frequency.setValueAtTime(freq/2, startTime);
+  gain.gain.setValueAtTime(0,startTime);
+  gain.gain.linearRampToValueAtTime(0.04,startTime+0.05);
+  gain.gain.exponentialRampToValueAtTime(0.0001,startTime+1.8);
+  osc.connect(gain); gain.connect(audioCtx.destination);
+  osc.start(startTime); osc.stop(startTime+2);
+}
+
+let arpStep = 0;
+const noteSpacing = 0.22; // seconds between notes
+
+function scheduleArpeggio(){
+  if(!audioCtx || !musicPlaying) return;
+  const now = audioCtx.currentTime;
+  for(let i=0;i<8;i++){
+    const ni = arpeggioPattern[(arpStep+i) % arpeggioPattern.length];
+    playHarpNote(notes[ni], now + i*noteSpacing, 1.1, 0.055);
+  }
+  // Bass note every cycle
+  playBass(notes[0], now);
+  playBass(notes[4], now + 4*noteSpacing);
+  arpStep = (arpStep + 8) % arpeggioPattern.length;
+}
+
+function startMusic(){
+  initAudio();
+  musicPlaying = true;
+  scheduleArpeggio();
+  musicInterval = setInterval(()=>{
+    if(musicPlaying) scheduleArpeggio();
+  }, 8 * noteSpacing * 1000);
+  showMusicBtn(true);
+}
+
+function stopMusic(){
+  musicPlaying = false;
+  clearInterval(musicInterval);
+  showMusicBtn(false);
+}
+
+function toggleMusic(){
+  if(musicPlaying){ stopMusic(); }
+  else { startMusic(); }
+  const btn = document.getElementById('musicBtn');
+  btn.classList.toggle('paused', !musicPlaying);
+}
+
+function showMusicBtn(playing){
+  const btn = document.getElementById('musicBtn');
+  btn.style.display = 'flex';
+  btn.classList.toggle('active', playing);
+  btn.classList.toggle('paused', !playing);
+}
+
+/* ============================
+   CLICK / TOUCH SOUND on heart
+   ============================ */
+function playHeartSound(){
+  initAudio();
+  const now = audioCtx.currentTime;
+  // Magical chime sparkle
+  [523.25, 659.25, 783.99, 1046.50].forEach((freq, i)=>{
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type='sine';
+    o.frequency.setValueAtTime(freq, now+i*0.07);
+    g.gain.setValueAtTime(0,now+i*0.07);
+    g.gain.linearRampToValueAtTime(0.18,now+i*0.07+0.02);
+    g.gain.exponentialRampToValueAtTime(0.0001,now+i*0.07+0.5);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(now+i*0.07); o.stop(now+i*0.07+0.6);
+  });
+}
+
+/* ============================
+   RIPPLE EFFECT
+   ============================ */
+function spawnRipple(x, y){
+  const r = document.createElement('div');
+  r.className = 'ripple-ring';
+  r.style.width = '60px'; r.style.height = '60px';
+  r.style.left = (x-30)+'px'; r.style.top = (y-30)+'px';
+  document.body.appendChild(r);
+  setTimeout(()=>r.remove(), 800);
+}
+
+/* ============================
+   OPEN INVITE
+   ============================ */
+function openInvite(e){
+  // Sound & ripple
+  playHeartSound();
+  const icon = document.getElementById('heartIcon');
+  icon.classList.add('pop');
+  setTimeout(()=>icon.classList.remove('pop'), 400);
+
+  const touch = e.touches ? e.touches[0] : e;
+  const cx = touch ? touch.clientX : window.innerWidth/2;
+  const cy = touch ? touch.clientY : window.innerHeight/2;
+  spawnRipple(cx, cy);
+
+  // Slight delay then fade out intro
+  setTimeout(()=>{
+    const intro = document.getElementById('intro');
+    intro.classList.add('hide');
+    setTimeout(()=>{
+      intro.style.display = 'none';
+      document.getElementById('main').style.display = 'block';
+      initAll();
+      // Start music after brief pause
+      setTimeout(startMusic, 600);
+    }, 1900);
+  }, 320);
+}
+
+/* ============================
+   INIT MAIN
+   ============================ */
+function initAll(){
+  generateSparkles();
   generateHearts();
+  setupScrollReveal();
+  setupParallax();
+  setupNavDots();
+  setupArrow();
+  setTimeout(()=>{
+    document.querySelectorAll('#s0 .reveal,#s0 .reveal-left,#s0 .reveal-right,#s0 .reveal-scale,#s0 .reveal-blur')
+      .forEach(el=>el.classList.add('v'));
+  }, 100);
 }
 
-// Scroll arrow
-function scrollDown(){
-  window.scrollBy({top:window.innerHeight,behavior:"smooth"});
+function setupScrollReveal(){
+  const els = document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale,.reveal-blur');
+  const obs = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('v'); obs.unobserve(e.target); } });
+  },{ threshold:0.12, rootMargin:'0px 0px -50px 0px' });
+  els.forEach(el=>obs.observe(el));
 }
 
-// Generate magical hearts under content
-function generateHearts(){
-  document.querySelectorAll(".particles").forEach(section=>{
-    for(let i=0;i<25;i++){
-      let heart=document.createElement("div");
-      heart.className="fall-heart";
-      heart.style.left=Math.random()*100+"%";
-      heart.style.fontSize=(12 + Math.random()*12)+"px";
-      let duration = (5 + Math.random()*5);
-      heart.style.animationDuration = duration + "s";
-      heart.style.zIndex = Math.random() > 0.5 ? "1" : "3";
-      heart.innerText = "❤️";
-      section.appendChild(heart);
+function setupParallax(){
+  window.addEventListener('scroll',()=>{
+    const y = window.scrollY;
+    document.querySelectorAll('.bg-img').forEach(img=>{ img.style.transform=`translateY(${y*0.07}px)`; });
+  },{passive:true});
+}
+
+function setupNavDots(){
+  const sections=['s0','s1','s2'].map(id=>document.getElementById(id));
+  const dots=document.querySelectorAll('.nav-dot');
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ const i=sections.indexOf(e.target); dots.forEach((d,j)=>d.classList.toggle('active',i===j)); } });
+  },{threshold:0.5});
+  sections.forEach(s=>obs.observe(s));
+}
+function goTo(i){ document.getElementById(['s0','s1','s2'][i]).scrollIntoView({behavior:'smooth'}); }
+
+function scrollDown(){ window.scrollBy({top:window.innerHeight,behavior:'smooth'}); }
+
+function setupArrow(){
+  const a=document.getElementById('arrow');
+  window.addEventListener('scroll',()=>{
+    const atBottom=window.innerHeight+window.scrollY>=document.body.offsetHeight-100;
+    a.style.opacity=atBottom?'0':'0.6';
+    a.style.pointerEvents=atBottom?'none':'auto';
+  },{passive:true});
+}
+
+function generateSparkles(){
+  document.querySelectorAll('.sparkles').forEach(c=>{
+    for(let i=0;i<22;i++){
+      const s=document.createElement('div'); s.className='sparkle';
+      s.style.left=Math.random()*100+'%'; s.style.top=(15+Math.random()*65)+'%';
+      const sz=1.5+Math.random()*3.5; s.style.width=s.style.height=sz+'px';
+      s.style.animationDuration=(4+Math.random()*7)+'s';
+      s.style.animationDelay=(Math.random()*10)+'s';
+      c.appendChild(s);
     }
   });
 }
 
-// Parallax horizontal movement for SVG clouds & vertical parallax for images
-window.addEventListener('scroll',()=>{
-  const scrollY = window.scrollY;
-
-  // Clouds horizontal movement
-  document.querySelectorAll(".cloud").forEach((cloud, index)=>{
-    let speed = 0.1 + index*0.05;
-    cloud.style.transform = `translateX(${scrollY*speed}px)`;
+function generateHearts(){
+  const em=['❤️','🤍','✨','🌸'];
+  document.querySelectorAll('.particles').forEach(c=>{
+    for(let i=0;i<14;i++){
+      const h=document.createElement('div'); h.className='fall-heart';
+      h.innerText=em[Math.floor(Math.random()*em.length)];
+      h.style.left=Math.random()*100+'%';
+      h.style.fontSize=(9+Math.random()*9)+'px';
+      h.style.animationDuration=(8+Math.random()*10)+'s';
+      h.style.animationDelay=(Math.random()*14)+'s';
+      h.style.zIndex=Math.random()>.5?'4':'2';
+      c.appendChild(h);
+    }
   });
-
-  // Background images vertical parallax
-  document.querySelectorAll(".bg-image").forEach((img,index)=>{
-    img.style.transform = "translateY("+(scrollY*0.05)+"px)";
-  });
-});
+}
 </script>
 </body>
 </html>
